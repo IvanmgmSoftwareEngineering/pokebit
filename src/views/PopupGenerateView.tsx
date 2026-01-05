@@ -43,7 +43,7 @@ const PopupGenerateView = ({ onBack, initialWordCount = 12 }: PopupGenerateViewP
     setConfirmPassword("");
     setPasswordError("");
     setWordCount(count);
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 500));
     const newWallet = await generateWallet(count);
     setWallet(newWallet);
     setLoading(false);
