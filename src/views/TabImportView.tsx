@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Wallet } from "@/lib/model";
 import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
 import CryptoCard from "@/components/extension/CryptoCard";
+import GlobalControls from "@/components/extension/GlobalControls";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 
 interface TabImportViewProps {
@@ -11,6 +13,7 @@ interface TabImportViewProps {
 }
 
 const TabImportView = ({ onBack }: TabImportViewProps) => {
+  const { t } = useLanguage();
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [wallet, setWallet] = useState<Wallet | null>(null);
@@ -24,8 +27,8 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
     setError("");
     
     if (!file.name.endsWith('.json')) {
-      setError("El archivo debe tener extensión .json");
-      toast.error("Formato de archivo inválido");
+      setError(t("import.errorFormat"));
+      toast.error(t("import.errorFormat"));
       return;
     }
     
@@ -66,20 +69,20 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
     setError("");
     
     if (!selectedFile) {
-      setError("Debes seleccionar un archivo de bóveda");
-      toast.error("No hay archivo seleccionado");
+      setError(t("import.errorFile"));
+      toast.error(t("import.errorFile"));
       return;
     }
 
     if (!password.trim()) {
-      setError("Debes introducir la contraseña");
-      toast.error("Contraseña requerida");
+      setError(t("import.errorPassword"));
+      toast.error(t("import.errorPassword"));
       return;
     }
 
     if (password.length < 8) {
-      setError("La contraseña debe tener al menos 8 caracteres");
-      toast.error("Contraseña muy corta");
+      setError(t("import.errorPasswordLength"));
+      toast.error(t("import.errorPasswordLength"));
       return;
     }
 
@@ -91,7 +94,7 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
       
       // Validate file structure
       if (!data.mnemonic || !data.accounts?.eth || !data.accounts?.btc) {
-        throw new Error("Estructura de archivo inválida");
+        throw new Error("Invalid structure");
       }
 
       // Simulate password verification delay
@@ -103,10 +106,10 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
       };
       
       setWallet(importedWallet);
-      toast.success("Bóveda importada exitosamente");
+      toast.success(t("import.success"));
     } catch (err) {
-      setError("Archivo inválido o contraseña incorrecta");
-      toast.error("Error al importar la bóveda");
+      setError(t("import.errorInvalid"));
+      toast.error(t("import.errorInvalid"));
     } finally {
       setLoading(false);
     }
@@ -114,18 +117,21 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto px-6 py-8">
+      <div className="max-w-2xl mx-auto px-6 py-4">
+        {/* Global Controls */}
+        <GlobalControls />
+
         {/* Header */}
-        <header className="text-center mb-10">
+        <header className="text-center mb-10 mt-4">
           <div className="relative inline-flex items-center justify-center w-24 h-24 mb-6">
             <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl animate-pulse" />
             <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/50 flex items-center justify-center">
               <Upload className="w-12 h-12 text-primary" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Importar Bóveda</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t("import.title")}</h1>
           <p className="text-muted-foreground">
-            Restaura tu wallet desde un archivo exportado
+            {t("import.subtitle")}
           </p>
         </header>
 
@@ -134,7 +140,7 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
             {/* File Drop Zone */}
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                📁 Archivo de Bóveda
+                {t("import.fileLabel")}
               </label>
               
               {!selectedFile ? (
@@ -153,13 +159,13 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
                 >
                   <FileUp className={`w-12 h-12 mx-auto mb-4 ${isDragOver ? 'text-primary' : 'text-muted-foreground'}`} />
                   <p className="text-foreground font-medium mb-1">
-                    Arrastra tu archivo aquí
+                    {t("import.dragHere")}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    o haz clic para seleccionar
+                    {t("import.clickSelect")}
                   </p>
                   <p className="text-xs text-muted-foreground mt-2">
-                    Solo archivos .json
+                    {t("import.onlyJson")}
                   </p>
                   <input
                     ref={fileInputRef}
@@ -191,14 +197,14 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
             {/* Password */}
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                🔒 Contraseña de Descifrado
+                {t("import.passwordLabel")}
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); setError(""); }}
-                  placeholder="Introduce la contraseña de la bóveda..."
+                  placeholder={t("import.passwordPlaceholder")}
                   className="w-full px-4 py-3 pr-12 bg-input border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
                 <button
@@ -230,12 +236,12 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
               {loading ? (
                 <>
                   <span className="animate-spin">⏳</span>
-                  Importando...
+                  {t("import.importing")}
                 </>
               ) : (
                 <>
                   <Upload className="w-5 h-5" />
-                  IMPORTAR BÓVEDA
+                  {t("import.importButton")}
                 </>
               )}
             </Button>
@@ -246,8 +252,8 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
             <div className="flex items-center gap-3 p-4 mb-6 bg-success/10 border border-success/30 rounded-xl">
               <CheckCircle className="w-6 h-6 text-success" />
               <div>
-                <p className="font-medium text-success">Bóveda importada correctamente</p>
-                <p className="text-sm text-muted-foreground">Tu wallet ha sido restaurada</p>
+                <p className="font-medium text-success">{t("import.success")}</p>
+                <p className="text-sm text-muted-foreground">{t("import.successMsg")}</p>
               </div>
             </div>
 
@@ -256,7 +262,7 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
 
             {/* Derived accounts */}
             <h3 className="text-lg font-semibold text-foreground mt-6 mb-4 flex items-center gap-2">
-              🛡️ Cuentas Derivadas
+              {t("generate.derivedAccounts")}
             </h3>
 
             <div className="space-y-4">
@@ -287,14 +293,14 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
             onClick={onBack}
           >
             <ArrowLeft className="w-4 h-4" />
-            Volver al Popup
+            {t("import.back")}
           </Button>
         </div>
 
         {/* Footer */}
         <footer className="mt-10 text-center">
           <p className="text-sm text-muted-foreground">
-            PokeBit 2024 | Secure Wallet Generator
+            {t("main.footer")}
           </p>
         </footer>
       </div>

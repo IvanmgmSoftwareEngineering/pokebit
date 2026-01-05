@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ExternalLink, Monitor, Smartphone } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import PopupMainView from "@/views/PopupMainView";
 import PopupGenerateView from "@/views/PopupGenerateView";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type PopupView = "main" | "generate";
 
 const Index = () => {
+  const { t } = useLanguage();
   const [currentView, setCurrentView] = useState<PopupView>("main");
 
   const handleGenerate = () => {
@@ -15,8 +16,6 @@ const Index = () => {
   };
 
   const handleImport = () => {
-    // En una extensión real, esto abriría chrome.tabs.create
-    // Aquí navegamos a la ruta /import
     window.open("/import", "_blank");
   };
 
@@ -30,13 +29,13 @@ const Index = () => {
       <div className="mb-6 text-center animate-fade-in">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm text-primary mb-4">
           <Monitor className="w-4 h-4" />
-          Mockup de Extensión Chrome
+          {t("demo.badge")}
         </div>
         <h1 className="text-3xl font-bold text-foreground mb-2">
-          PokeBit Wallet Extension
+          {t("demo.title")}
         </h1>
         <p className="text-muted-foreground max-w-md">
-          Previsualización del flujo: Popup inicial → Vista generación (popup) → Vista importación (pestaña nueva)
+          {t("demo.subtitle")}
         </p>
       </div>
 
@@ -57,22 +56,22 @@ const Index = () => {
       <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: "0.3s" }}>
         <span className="flex items-center gap-2">
           <Smartphone className="w-4 h-4" />
-          Vista Popup: 420px
+          {t("demo.popupSize")}
         </span>
         <span className="text-border">|</span>
         <Link to="/import" className="flex items-center gap-1 text-primary hover:underline">
-          Ver Vista Tab Completa
+          {t("demo.viewTab")}
           <ExternalLink className="w-3 h-3" />
         </Link>
       </div>
 
       {/* MVC Architecture info */}
       <div className="mt-8 max-w-lg p-4 rounded-xl bg-card/50 border border-border/50 animate-fade-in" style={{ animationDelay: "0.5s" }}>
-        <h3 className="text-sm font-semibold text-foreground mb-2">📐 Arquitectura MVC</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-2">{t("demo.architecture")}</h3>
         <ul className="text-xs text-muted-foreground space-y-1">
-          <li><strong className="text-foreground">Model:</strong> src/lib/model.ts - Lógica de generación y derivación</li>
-          <li><strong className="text-foreground">Views:</strong> src/views/ - PopupMainView, PopupGenerateView, TabImportView</li>
-          <li><strong className="text-foreground">Controller:</strong> Los componentes React manejan los eventos</li>
+          <li><strong className="text-foreground">{t("demo.model")}</strong> {t("demo.modelDesc")}</li>
+          <li><strong className="text-foreground">{t("demo.views")}</strong> {t("demo.viewsDesc")}</li>
+          <li><strong className="text-foreground">{t("demo.controller")}</strong> {t("demo.controllerDesc")}</li>
         </ul>
       </div>
     </div>

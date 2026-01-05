@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Copy, Check, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 
 interface SeedPhraseDisplayProps {
@@ -8,6 +9,7 @@ interface SeedPhraseDisplayProps {
 }
 
 const SeedPhraseDisplay = ({ seedPhrase }: SeedPhraseDisplayProps) => {
+  const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [visible, setVisible] = useState(true);
   const words = seedPhrase.split(" ");
@@ -15,7 +17,7 @@ const SeedPhraseDisplay = ({ seedPhrase }: SeedPhraseDisplayProps) => {
   const handleCopy = async () => {
     await navigator.clipboard.writeText(seedPhrase);
     setCopied(true);
-    toast.success("Frase semilla copiada al portapapeles");
+    toast.success(t("seedPhrase.copied"));
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -23,7 +25,7 @@ const SeedPhraseDisplay = ({ seedPhrase }: SeedPhraseDisplayProps) => {
     <div className="animate-slide-up" style={{ animationDelay: "0.05s" }}>
       <div className="flex items-center justify-between mb-3">
         <label className="text-sm font-medium text-foreground flex items-center gap-2">
-          📝 Frase de Recuperación (BIP-39)
+          {t("seedPhrase.title")}
         </label>
         <Button
           variant="ghost"
@@ -32,7 +34,6 @@ const SeedPhraseDisplay = ({ seedPhrase }: SeedPhraseDisplayProps) => {
           className="text-xs"
         >
           {visible ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
-          {visible ? "Ocultar" : "Mostrar"}
         </Button>
       </div>
 
@@ -62,17 +63,15 @@ const SeedPhraseDisplay = ({ seedPhrase }: SeedPhraseDisplayProps) => {
         onClick={handleCopy}
       >
         {copied ? (
-          <>
-            <Check className="w-4 h-4" />
-            Copiada
-          </>
+          <Check className="w-4 h-4" />
         ) : (
-          <>
-            <Copy className="w-4 h-4" />
-            Copiar Frase Completa
-          </>
+          <Copy className="w-4 h-4" />
         )}
       </Button>
+
+      <p className="mt-3 text-xs text-warning/80 leading-relaxed text-center">
+        ⚠️ {t("seedPhrase.warning")}
+      </p>
     </div>
   );
 };
