@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft, Download, RefreshCw } from "lucide-react";
+import { ArrowLeft, Download, RefreshCw, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PopupHeader from "@/components/extension/PopupHeader";
 import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
@@ -15,6 +15,10 @@ interface PopupGenerateViewProps {
 const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
   const [loading, setLoading] = useState(true);
   const [wallet, setWallet] = useState<Wallet | null>(null);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     generateNewWallet();
@@ -22,7 +26,9 @@ const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
 
   const generateNewWallet = async () => {
     setLoading(true);
-    // Simular tiempo de generación para UX
+    setPassword("");
+    setConfirmPassword("");
+    setPasswordError("");
     await new Promise(resolve => setTimeout(resolve, 1500));
     const newWallet = await generateWallet();
     setWallet(newWallet);
@@ -30,8 +36,34 @@ const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
     toast.success("Bóveda generada exitosamente");
   };
 
+  const validatePasswords = (): boolean => {
+    if (!password.trim()) {
+      setPasswordError("Debes introducir una contraseña");
+      return false;
+    }
+    if (password.length < 8) {
+      setPasswordError("La contraseña debe tener al menos 8 caracteres");
+      return false;
+    }
+    if (!confirmPassword.trim()) {
+      setPasswordError("Debes confirmar la contraseña");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      setPasswordError("Las contraseñas no coinciden");
+      return false;
+    }
+    setPasswordError("");
+    return true;
+  };
+
   const handleExport = () => {
     if (!wallet) return;
+    
+    if (!validatePasswords()) {
+      toast.error(passwordError || "Revisa los campos de contraseña");
+      return;
+    }
     
     const data = JSON.stringify({
       mnemonic: wallet.mnemonic,
@@ -99,8 +131,47 @@ const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
               </div>
             </div>
 
+            {/* Password fields */}
+            <div className="mt-5 space-y-3">
+              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                🔒 Proteger Bóveda
+              </h3>
+              
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setPasswordError(""); }}
+                  placeholder="Contraseña (mín. 8 caracteres)"
+                  className="w-full px-3 py-2 pr-10 bg-input border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              
+              <input
+                type={showPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => { setConfirmPassword(e.target.value); setPasswordError(""); }}
+                placeholder="Repetir contraseña"
+                className="w-full px-3 py-2 bg-input border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              />
+
+              {passwordError && (
+                <div className="flex items-center gap-2 p-2 bg-destructive/10 border border-destructive/30 rounded-lg text-destructive text-xs">
+                  <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                  {passwordError}
+                </div>
+              )}
+            </div>
+
             {/* Action buttons */}
-            <div className="mt-5 space-y-2">
+            <div className="mt-4 space-y-2">
               <Button
                 variant="success"
                 className="w-full"
