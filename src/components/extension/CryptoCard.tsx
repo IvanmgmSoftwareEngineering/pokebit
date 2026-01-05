@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 
 interface CryptoCardProps {
@@ -12,13 +13,14 @@ interface CryptoCardProps {
 }
 
 const CryptoCard = ({ type, privateKey, publicAddress, icon, name }: CryptoCardProps) => {
+  const { t } = useLanguage();
   const [showPrivateKey, setShowPrivateKey] = useState(false);
   const [copied, setCopied] = useState<"priv" | "pub" | null>(null);
 
   const handleCopy = async (text: string, keyType: "priv" | "pub") => {
     await navigator.clipboard.writeText(text);
     setCopied(keyType);
-    toast.success(`${keyType === "priv" ? "Clave privada" : "Dirección"} copiada`);
+    toast.success(t("crypto.copied"));
     setTimeout(() => setCopied(null), 2000);
   };
 
@@ -33,7 +35,7 @@ const CryptoCard = ({ type, privateKey, publicAddress, icon, name }: CryptoCardP
 
       {/* Private Key */}
       <div className="mb-3">
-        <label className="text-xs text-muted-foreground mb-1 block">Clave Privada</label>
+        <label className="text-xs text-muted-foreground mb-1 block">{t("crypto.privateKey")}</label>
         <div className="flex items-center gap-2">
           <input
             type={showPrivateKey ? "text" : "password"}
@@ -60,7 +62,7 @@ const CryptoCard = ({ type, privateKey, publicAddress, icon, name }: CryptoCardP
 
       {/* Public Address */}
       <div>
-        <label className="text-xs text-muted-foreground mb-1 block">Dirección Pública</label>
+        <label className="text-xs text-muted-foreground mb-1 block">{t("crypto.publicAddress")}</label>
         <div className="flex items-center gap-2">
           <input
             type="text"
