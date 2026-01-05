@@ -4,14 +4,17 @@ import { ExternalLink, Monitor, Smartphone } from "lucide-react";
 import PopupMainView from "@/views/PopupMainView";
 import PopupGenerateView from "@/views/PopupGenerateView";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { WordCount } from "@/lib/model";
 
 type PopupView = "main" | "generate";
 
 const Index = () => {
   const { t } = useLanguage();
   const [currentView, setCurrentView] = useState<PopupView>("main");
+  const [wordCount, setWordCount] = useState<WordCount>(12);
 
-  const handleGenerate = () => {
+  const handleGenerate = (count: WordCount) => {
+    setWordCount(count);
     setCurrentView("generate");
   };
 
@@ -48,7 +51,7 @@ const Index = () => {
           />
         )}
         {currentView === "generate" && (
-          <PopupGenerateView onBack={handleBack} />
+          <PopupGenerateView onBack={handleBack} initialWordCount={wordCount} />
         )}
       </div>
 

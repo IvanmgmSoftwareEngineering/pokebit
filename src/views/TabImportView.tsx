@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { ArrowLeft, Upload, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Wallet } from "@/lib/model";
+import { Wallet, decryptVault, EncryptedVault } from "@/lib/model";
 import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
 import CryptoCard from "@/components/extension/CryptoCard";
 import GlobalControls from "@/components/extension/GlobalControls";
@@ -26,7 +26,7 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
   const handleFileSelect = (file: File) => {
     setError("");
     
-    if (!file.name.endsWith('.json')) {
+    if (!file.name.endsWith('.aes')) {
       setError(t("import.errorFormat"));
       toast.error(t("import.errorFormat"));
       return;
@@ -90,22 +90,24 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
     
     try {
       const fileContent = await selectedFile.text();
-      const data = JSON.parse(fileContent);
+      const encryptedData: EncryptedVault = JSON.parse(fileContent);
       
-      // Validate file structure
-      if (!data.mnemonic || !data.accounts?.eth || !data.accounts?.btc) {
+      // Validate encrypted vault structure
+      if (!encryptedData.encrypted || !encryptedData.version) {
         throw new Error("Invalid structure");
       }
 
-      // Simulate password verification delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Decrypt with AES-256
+      const decryptedWallet = decryptVault(encryptedData, password);
       
-      const importedWallet: Wallet = {
-        mnemonic: data.mnemonic,
-        accounts: data.accounts
-      };
+      if (!decryptedWallet) {
+        setError(t("import.errorInvalid"));
+        toast.error(t("import.errorInvalid"));
+        setLoading(false);
+        return;
+      }
       
-      setWallet(importedWallet);
+      setWallet(decryptedWallet);
       toast.success(t("import.success"));
     } catch (err) {
       setError(t("import.errorInvalid"));
@@ -165,12 +167,12 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
                     {t("import.clickSelect")}
                   </p>
                   <p className="text-xs text-muted-foreground mt-2">
-                    {t("import.onlyJson")}
+                    {t("import.onlyAes")}
                   </p>
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".json"
+                    accept=".aes"
                     onChange={handleFileInputChange}
                     className="hidden"
                   />

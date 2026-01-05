@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import PopupHeader from "@/components/extension/PopupHeader";
 import GlobalControls from "@/components/extension/GlobalControls";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { WordCount } from "@/lib/model";
 
 interface PopupMainViewProps {
-  onGenerate: () => void;
+  onGenerate: (wordCount: WordCount) => void;
   onImport: () => void;
 }
 
@@ -23,14 +24,26 @@ const PopupMainView = ({ onGenerate, onImport }: PopupMainViewProps) => {
 
       <main className="flex-1 px-5 pb-4">
         <div className="space-y-3">
+          {/* 12 words button */}
           <Button
             variant="generate"
             size="lg"
             className="w-full text-base"
-            onClick={onGenerate}
+            onClick={() => onGenerate(12)}
           >
             <Rocket className="w-5 h-5" />
-            {t("main.generate")}
+            {t("main.generate12")}
+          </Button>
+
+          {/* 24 words button */}
+          <Button
+            variant="generate"
+            size="lg"
+            className="w-full text-base bg-primary/80 hover:bg-primary/90"
+            onClick={() => onGenerate(24)}
+          >
+            <Rocket className="w-5 h-5" />
+            {t("main.generate24")}
           </Button>
 
           <Button

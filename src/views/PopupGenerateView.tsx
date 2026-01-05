@@ -1,20 +1,28 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft, Download, RefreshCw, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { ArrowLeft, Download, RefreshCw, Eye, EyeOff, AlertCircle, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PopupHeader from "@/components/extension/PopupHeader";
 import GlobalControls from "@/components/extension/GlobalControls";
 import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
 import CryptoCard from "@/components/extension/CryptoCard";
 import LoadingSpinner from "@/components/extension/LoadingSpinner";
-import { generateWallet, Wallet } from "@/lib/model";
+import { generateWallet, encryptVault, Wallet, WordCount } from "@/lib/model";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 interface PopupGenerateViewProps {
   onBack: () => void;
+  initialWordCount?: WordCount;
 }
 
-const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
+const PopupGenerateView = ({ onBack, initialWordCount = 12 }: PopupGenerateViewProps) => {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [wallet, setWallet] = useState<Wallet | null>(null);
@@ -22,18 +30,21 @@ const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [wordCount, setWordCount] = useState<WordCount>(initialWordCount);
+  const [showHelpDialog, setShowHelpDialog] = useState(false);
 
   useEffect(() => {
-    generateNewWallet();
+    generateNewWallet(initialWordCount);
   }, []);
 
-  const generateNewWallet = async () => {
+  const generateNewWallet = async (count: WordCount = wordCount) => {
     setLoading(true);
     setPassword("");
     setConfirmPassword("");
     setPasswordError("");
+    setWordCount(count);
     await new Promise(resolve => setTimeout(resolve, 1500));
-    const newWallet = await generateWallet();
+    const newWallet = await generateWallet(count);
     setWallet(newWallet);
     setLoading(false);
     toast.success(t("generate.success"));
@@ -68,17 +79,14 @@ const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
       return;
     }
     
-    const data = JSON.stringify({
-      mnemonic: wallet.mnemonic,
-      accounts: wallet.accounts,
-      exportedAt: new Date().toISOString()
-    }, null, 2);
+    // Cifrar con AES-256
+    const encryptedData = encryptVault(wallet, password);
     
-    const blob = new Blob([data], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(encryptedData, null, 2)], { type: 'application/octet-stream' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `pokebit-wallet-${Date.now()}.json`;
+    a.download = `pokebit-vault-${Date.now()}.aes`;
     a.click();
     URL.revokeObjectURL(url);
     toast.success(t("generate.exported"));
@@ -138,9 +146,18 @@ const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
 
             {/* Password fields */}
             <div className="mt-5 space-y-3">
-              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                {t("generate.protectVault")}
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-foreground">
+                  {t("generate.protectVault")}
+                </h3>
+                <button
+                  onClick={() => setShowHelpDialog(true)}
+                  className="text-xs text-primary hover:text-primary/80 hover:underline transition-colors flex items-center gap-1"
+                >
+                  <HelpCircle className="w-3 h-3" />
+                  {t("generate.howItWorks")}
+                </button>
+              </div>
               
               <div className="relative">
                 <input
@@ -186,14 +203,25 @@ const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
                 {t("generate.exportVault")}
               </Button>
               
-              <Button
-                variant="secondary"
-                className="w-full"
-                onClick={generateNewWallet}
-              >
-                <RefreshCw className="w-4 h-4" />
-                {t("generate.generateNew")}
-              </Button>
+              {/* Word count selector with regenerate */}
+              <div className="flex gap-2">
+                <Button
+                  variant={wordCount === 12 ? "secondary" : "outline"}
+                  className="flex-1"
+                  onClick={() => generateNewWallet(12)}
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  12 {t("generate.words")}
+                </Button>
+                <Button
+                  variant={wordCount === 24 ? "secondary" : "outline"}
+                  className="flex-1"
+                  onClick={() => generateNewWallet(24)}
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  24 {t("generate.words")}
+                </Button>
+              </div>
             </div>
           </>
         )}
@@ -210,6 +238,25 @@ const PopupGenerateView = ({ onBack }: PopupGenerateViewProps) => {
           {t("generate.back")}
         </Button>
       </footer>
+
+      {/* Help Dialog */}
+      <Dialog open={showHelpDialog} onOpenChange={setShowHelpDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              🔐 {t("generate.helpTitle")}
+            </DialogTitle>
+          </DialogHeader>
+          <DialogDescription className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+            {t("generate.helpText")}
+          </DialogDescription>
+          <div className="mt-4 p-3 bg-warning/10 border border-warning/30 rounded-lg">
+            <p className="text-xs text-warning font-medium">
+              ⚠️ {t("generate.helpWarning")}
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
