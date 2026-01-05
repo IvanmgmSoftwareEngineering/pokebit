@@ -3,6 +3,31 @@ import { Buffer } from 'buffer';
 import { ethers } from 'ethers';
 import * as bip39 from 'bip39';
 import CryptoJS from 'crypto-js';
+import { HDKey } from '@scure/bip32';
+import { base58check } from '@scure/base';
+
+// Simple hash functions using crypto-js
+function sha256Hash(data: Uint8Array): Uint8Array {
+  const wordArray = CryptoJS.lib.WordArray.create(data as unknown as number[]);
+  const hash = CryptoJS.SHA256(wordArray);
+  return wordArrayToUint8Array(hash);
+}
+
+function ripemd160Hash(data: Uint8Array): Uint8Array {
+  const wordArray = CryptoJS.lib.WordArray.create(data as unknown as number[]);
+  const hash = CryptoJS.RIPEMD160(wordArray);
+  return wordArrayToUint8Array(hash);
+}
+
+function wordArrayToUint8Array(wordArray: CryptoJS.lib.WordArray): Uint8Array {
+  const words = wordArray.words;
+  const sigBytes = wordArray.sigBytes;
+  const u8 = new Uint8Array(sigBytes);
+  for (let i = 0; i < sigBytes; i++) {
+    u8[i] = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+  }
+  return u8;
+}
 
 // Polyfill Buffer para el navegador
 if (typeof window !== 'undefined') {
@@ -41,20 +66,48 @@ export async function generateMnemonic(wordCount: WordCount = 12): Promise<strin
   return mnemonic;
 }
 
-// Deriva cuentas ETH y BTC desde el mnemonic
+// Función sha256 para base58check
+function sha256ForBase58(data: Uint8Array): Uint8Array {
+  return sha256Hash(data);
+}
+
+// Convierte clave privada a formato WIF (Wallet Import Format)
+function privateKeyToWIF(privateKey: Uint8Array): string {
+  // Prefix 0x80 para mainnet
+  const prefixed = new Uint8Array([0x80, ...privateKey, 0x01]); // 0x01 para compressed
+  return base58check(sha256ForBase58).encode(prefixed);
+}
+
+// Genera dirección Bitcoin desde clave pública comprimida
+function publicKeyToAddress(publicKey: Uint8Array): string {
+  // SHA256 -> RIPEMD160
+  const sha256Result = sha256Hash(publicKey);
+  const hash160 = ripemd160Hash(sha256Result);
+  
+  // Prefix 0x00 para mainnet P2PKH
+  const prefixed = new Uint8Array([0x00, ...hash160]);
+  return base58check(sha256ForBase58).encode(prefixed);
+}
+
+// Deriva cuentas ETH y BTC desde el mnemonic usando BIP44
 export async function deriveAccounts(mnemonic: string): Promise<WalletAccounts> {
   // Derivar cuenta Ethereum usando ethers.js
   const ethWallet = ethers.Wallet.fromPhrase(mnemonic);
   
-  // Para Bitcoin, usamos una derivación simplificada basada en el seed
-  // En producción real usarías bitcoinjs-lib con paths BIP44
+  // Derivar cuenta Bitcoin usando BIP44 path: m/44'/0'/0'/0/0
   const seed = await bip39.mnemonicToSeed(mnemonic);
-  const seedHex = Buffer.from(seed).toString('hex');
+  const masterKey = HDKey.fromMasterSeed(seed);
   
-  // Generar claves BTC usando hash del seed (simplificado)
-  // En producción: usar derivación BIP44 m/44'/0'/0'/0/0
-  const btcPrivateKeyHex = seedHex.substring(0, 64);
-  const btcAddressHash = seedHex.substring(64, 104);
+  // BIP44 path para Bitcoin mainnet: m/44'/0'/0'/0/0
+  const btcPath = "m/44'/0'/0'/0/0";
+  const btcKey = masterKey.derive(btcPath);
+  
+  if (!btcKey.privateKey || !btcKey.publicKey) {
+    throw new Error("Failed to derive BTC keys");
+  }
+  
+  const btcPrivateKeyWIF = privateKeyToWIF(btcKey.privateKey);
+  const btcAddress = publicKeyToAddress(btcKey.publicKey);
   
   return {
     eth: {
@@ -62,8 +115,8 @@ export async function deriveAccounts(mnemonic: string): Promise<WalletAccounts> 
       publicAddress: ethWallet.address
     },
     btc: {
-      privateKey: `L${btcPrivateKeyHex.substring(0, 51)}`,
-      publicAddress: `bc1q${btcAddressHash.substring(0, 38)}`
+      privateKey: btcPrivateKeyWIF,
+      publicAddress: btcAddress
     }
   };
 }

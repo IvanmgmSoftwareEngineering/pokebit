@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { ArrowLeft, Upload, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X } from "lucide-react";
+import { ArrowLeft, Upload, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Wallet, decryptVault, EncryptedVault } from "@/lib/model";
 import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
@@ -7,6 +7,16 @@ import CryptoCard from "@/components/extension/CryptoCard";
 import GlobalControls from "@/components/extension/GlobalControls";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface TabImportViewProps {
   onBack: () => void;
@@ -21,6 +31,8 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
   const [error, setError] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showResetFinal, setShowResetFinal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (file: File) => {
@@ -115,6 +127,27 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    setShowResetConfirm(true);
+  };
+
+  const handleResetConfirm = () => {
+    setShowResetConfirm(false);
+    setShowResetFinal(true);
+  };
+
+  const handleResetFinal = () => {
+    setShowResetFinal(false);
+    setWallet(null);
+    setPassword("");
+    setSelectedFile(null);
+    setError("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    toast.success(t("import.resetSuccess"));
   };
 
   return (
@@ -287,16 +320,27 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
           </div>
         )}
 
-        {/* Back button */}
+        {/* Bottom button */}
         <div className="mt-8 pt-6 border-t border-border/50">
-          <Button
-            variant="ghost"
-            className="w-full"
-            onClick={onBack}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {t("import.back")}
-          </Button>
+          {wallet ? (
+            <Button
+              variant="destructive"
+              className="w-full"
+              onClick={handleReset}
+            >
+              <RotateCcw className="w-4 h-4" />
+              {t("import.reset")}
+            </Button>
+          ) : (
+            <Button
+              variant="ghost"
+              className="w-full"
+              onClick={onBack}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {t("import.backMenu")}
+            </Button>
+          )}
         </div>
 
         {/* Footer */}
@@ -306,6 +350,52 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
           </p>
         </footer>
       </div>
+
+      {/* First Reset Confirmation Dialog */}
+      <AlertDialog open={showResetConfirm} onOpenChange={setShowResetConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-destructive flex items-center gap-2">
+              ⚠️ {t("import.resetTitle")}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("import.resetWarning1")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("import.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleResetConfirm}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t("import.continue")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Final Reset Confirmation Dialog */}
+      <AlertDialog open={showResetFinal} onOpenChange={setShowResetFinal}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-destructive flex items-center gap-2">
+              🚨 {t("import.resetFinalTitle")}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("import.resetWarning2")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("import.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleResetFinal}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {t("import.confirmReset")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
