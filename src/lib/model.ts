@@ -1,7 +1,13 @@
 // Modelo - Lógica de negocio para la wallet
+import { Buffer } from 'buffer';
 import { ethers } from 'ethers';
 import * as bip39 from 'bip39';
 import CryptoJS from 'crypto-js';
+
+// Polyfill Buffer para el navegador
+if (typeof window !== 'undefined') {
+  window.Buffer = Buffer;
+}
 
 export interface WalletAccounts {
   eth: {
