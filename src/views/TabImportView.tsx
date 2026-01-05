@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { ArrowLeft, Upload, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
+import { useState, useRef } from "react";
+import { ArrowLeft, Upload, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { deriveAccounts, validateMnemonic, WalletAccounts } from "@/lib/model";
+import { Wallet } from "@/lib/model";
+import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
 import CryptoCard from "@/components/extension/CryptoCard";
 import { toast } from "sonner";
 
@@ -10,26 +11,69 @@ interface TabImportViewProps {
 }
 
 const TabImportView = ({ onBack }: TabImportViewProps) => {
-  const [mnemonic, setMnemonic] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [accounts, setAccounts] = useState<WalletAccounts | null>(null);
+  const [wallet, setWallet] = useState<Wallet | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = (file: File) => {
+    setError("");
+    
+    if (!file.name.endsWith('.json')) {
+      setError("El archivo debe tener extensión .json");
+      toast.error("Formato de archivo inválido");
+      return;
+    }
+    
+    setSelectedFile(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    const file = e.dataTransfer.files[0];
+    if (file) handleFileSelect(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleFileSelect(file);
+  };
+
+  const clearFile = () => {
+    setSelectedFile(null);
+    setError("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   const handleImport = async () => {
     setError("");
     
-    if (!validateMnemonic(mnemonic)) {
-      setError("La frase semilla debe tener 12 o 24 palabras válidas");
-      toast.error("Frase semilla inválida");
+    if (!selectedFile) {
+      setError("Debes seleccionar un archivo de bóveda");
+      toast.error("No hay archivo seleccionado");
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden");
-      toast.error("Las contraseñas no coinciden");
+    if (!password.trim()) {
+      setError("Debes introducir la contraseña");
+      toast.error("Contraseña requerida");
       return;
     }
 
@@ -40,12 +84,32 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
     }
 
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    const derivedAccounts = await deriveAccounts(mnemonic);
-    setAccounts(derivedAccounts);
-    setLoading(false);
-    toast.success("Bóveda importada exitosamente");
+    try {
+      const fileContent = await selectedFile.text();
+      const data = JSON.parse(fileContent);
+      
+      // Validate file structure
+      if (!data.mnemonic || !data.accounts?.eth || !data.accounts?.btc) {
+        throw new Error("Estructura de archivo inválida");
+      }
+
+      // Simulate password verification delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const importedWallet: Wallet = {
+        mnemonic: data.mnemonic,
+        accounts: data.accounts
+      };
+      
+      setWallet(importedWallet);
+      toast.success("Bóveda importada exitosamente");
+    } catch (err) {
+      setError("Archivo inválido o contraseña incorrecta");
+      toast.error("Error al importar la bóveda");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,36 +125,80 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
           </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">Importar Bóveda</h1>
           <p className="text-muted-foreground">
-            Restaura tu wallet con tu frase de recuperación
+            Restaura tu wallet desde un archivo exportado
           </p>
         </header>
 
-        {!accounts ? (
+        {!wallet ? (
           <div className="space-y-6 animate-fade-in">
-            {/* Mnemonic Input */}
+            {/* File Drop Zone */}
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                📝 Frase de Recuperación (12 o 24 palabras)
+                📁 Archivo de Bóveda
               </label>
-              <textarea
-                value={mnemonic}
-                onChange={(e) => setMnemonic(e.target.value)}
-                placeholder="Ingresa tu frase semilla separada por espacios..."
-                className="w-full h-32 px-4 py-3 bg-input border border-border rounded-xl font-mono text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
-              />
+              
+              {!selectedFile ? (
+                <div
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`
+                    relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all
+                    ${isDragOver 
+                      ? 'border-primary bg-primary/10' 
+                      : 'border-border hover:border-primary/50 hover:bg-primary/5'
+                    }
+                  `}
+                >
+                  <FileUp className={`w-12 h-12 mx-auto mb-4 ${isDragOver ? 'text-primary' : 'text-muted-foreground'}`} />
+                  <p className="text-foreground font-medium mb-1">
+                    Arrastra tu archivo aquí
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    o haz clic para seleccionar
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Solo archivos .json
+                  </p>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".json"
+                    onChange={handleFileInputChange}
+                    className="hidden"
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 p-4 bg-primary/10 border border-primary/30 rounded-xl">
+                  <FileUp className="w-8 h-8 text-primary" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-foreground truncate">{selectedFile.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {(selectedFile.size / 1024).toFixed(1)} KB
+                    </p>
+                  </div>
+                  <button
+                    onClick={clearFile}
+                    className="p-1 hover:bg-destructive/20 rounded-lg transition-colors"
+                  >
+                    <X className="w-5 h-5 text-muted-foreground hover:text-destructive" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Password */}
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                🔒 Contraseña de Cifrado
+                🔒 Contraseña de Descifrado
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Mínimo 8 caracteres..."
+                  onChange={(e) => { setPassword(e.target.value); setError(""); }}
+                  placeholder="Introduce la contraseña de la bóveda..."
                   className="w-full px-4 py-3 pr-12 bg-input border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
                 <button
@@ -101,20 +209,6 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-            </div>
-
-            {/* Confirm Password */}
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                🔒 Confirmar Contraseña
-              </label>
-              <input
-                type={showPassword ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Repite la contraseña..."
-                className="w-full px-4 py-3 bg-input border border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
             </div>
 
             {/* Error message */}
@@ -131,7 +225,7 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
               size="lg"
               className="w-full text-base"
               onClick={handleImport}
-              disabled={loading || !mnemonic.trim()}
+              disabled={loading || !selectedFile}
             >
               {loading ? (
                 <>
@@ -153,12 +247,15 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
               <CheckCircle className="w-6 h-6 text-success" />
               <div>
                 <p className="font-medium text-success">Bóveda importada correctamente</p>
-                <p className="text-sm text-muted-foreground">Tus cuentas han sido restauradas</p>
+                <p className="text-sm text-muted-foreground">Tu wallet ha sido restaurada</p>
               </div>
             </div>
 
+            {/* Seed phrase */}
+            <SeedPhraseDisplay seedPhrase={wallet.mnemonic} />
+
             {/* Derived accounts */}
-            <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-foreground mt-6 mb-4 flex items-center gap-2">
               🛡️ Cuentas Derivadas
             </h3>
 
@@ -167,16 +264,16 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
                 type="eth"
                 icon="⧫"
                 name="Ethereum (ETH)"
-                privateKey={accounts.eth.privateKey}
-                publicAddress={accounts.eth.publicAddress}
+                privateKey={wallet.accounts.eth.privateKey}
+                publicAddress={wallet.accounts.eth.publicAddress}
               />
               
               <CryptoCard
                 type="btc"
                 icon="₿"
                 name="Bitcoin (BTC)"
-                privateKey={accounts.btc.privateKey}
-                publicAddress={accounts.btc.publicAddress}
+                privateKey={wallet.accounts.btc.privateKey}
+                publicAddress={wallet.accounts.btc.publicAddress}
               />
             </div>
           </div>
