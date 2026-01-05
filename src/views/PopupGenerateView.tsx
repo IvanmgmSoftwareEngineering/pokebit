@@ -6,6 +6,7 @@ import GlobalControls from "@/components/extension/GlobalControls";
 import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
 import CryptoCard from "@/components/extension/CryptoCard";
 import LoadingSpinner from "@/components/extension/LoadingSpinner";
+import PasswordStrengthIndicator from "@/components/extension/PasswordStrengthIndicator";
 import { generateWallet, encryptVault, Wallet, WordCount } from "@/lib/model";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
@@ -176,6 +177,8 @@ const PopupGenerateView = ({ onBack, initialWordCount = 12 }: PopupGenerateViewP
                 </button>
               </div>
               
+              {/* Password Strength Indicator */}
+              <PasswordStrengthIndicator password={password} />
               <input
                 type={showPassword ? "text" : "password"}
                 value={confirmPassword}
