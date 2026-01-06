@@ -3,7 +3,7 @@ import { Sun, Moon, ChevronDown } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage, languages } from "@/contexts/LanguageContext";
 
-const GlobalControls = forwardRef<HTMLDivElement>((_, ref) => {
+const GlobalControls = forwardRef<HTMLDivElement, object>(function GlobalControls(_, ref) {
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
