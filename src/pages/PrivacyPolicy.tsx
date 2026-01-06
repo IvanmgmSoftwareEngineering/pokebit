@@ -1,10 +1,11 @@
+import { forwardRef } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import GlobalControls from "@/components/extension/GlobalControls";
 
-const PrivacyPolicy = () => {
+const PrivacyPolicy = forwardRef<HTMLDivElement>((_, ref) => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
 
@@ -31,7 +32,7 @@ const PrivacyPolicy = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div ref={ref} className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto px-6 py-8">
         {/* Header with controls */}
         <header className="mb-8">
@@ -154,6 +155,8 @@ const PrivacyPolicy = () => {
       </div>
     </div>
   );
-};
+});
+
+PrivacyPolicy.displayName = "PrivacyPolicy";
 
 export default PrivacyPolicy;

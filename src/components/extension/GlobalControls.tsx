@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import { Sun, Moon, ChevronDown } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage, languages } from "@/contexts/LanguageContext";
 
-const GlobalControls = () => {
+const GlobalControls = forwardRef<HTMLDivElement>((_, ref) => {
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +11,7 @@ const GlobalControls = () => {
   const currentLang = languages.find(l => l.code === language);
 
   return (
-    <div className="flex items-center justify-between w-full px-3 py-2">
+    <div ref={ref} className="flex items-center justify-between w-full px-3 py-2">
       {/* Theme Toggle - Left */}
       <button
         onClick={toggleTheme}
@@ -64,6 +64,8 @@ const GlobalControls = () => {
       </div>
     </div>
   );
-};
+});
+
+GlobalControls.displayName = "GlobalControls";
 
 export default GlobalControls;
