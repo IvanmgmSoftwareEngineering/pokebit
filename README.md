@@ -2,8 +2,8 @@
   <img src="public/pokebit-logo-original.png" alt="PokeBit Logo" width="120" height="120">
 </p>
 
-<h1 align="center">🔐 PokeBit</h1>
-<h3 align="center">High Entropy Wallet Generator</h3>
+<h1 align="center">PokeBit</h1>
+<h3 align="center">🔐 High Entropy Wallet Generator</h3>
 
 <p align="center">
   <strong>Generate secure cryptocurrency wallets with military-grade security, completely offline.</strong>
@@ -28,13 +28,8 @@
 
 <p align="center">
   <img src="public/screenshots/screenshot-1-main.png" alt="Main Screen" width="200">
-  <img src="public/screenshots/screenshot-2-seedphrase.png" alt="Seed Phrase" width="200">
   <img src="public/screenshots/screenshot-3-accounts.png" alt="Derived Accounts" width="200">
-</p>
-
-<p align="center">
   <img src="public/screenshots/screenshot-4-import.png" alt="Import Vault" width="200">
-  <img src="public/screenshots/screenshot-5-languages.png" alt="Multi-language" width="200">
 </p>
 
 ---
