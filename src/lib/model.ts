@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import * as bip39 from 'bip39';
 import CryptoJS from 'crypto-js';
 import { HDKey } from '@scure/bip32';
-import { base58check } from '@scure/base';
+import { base58check, bech32 } from '@scure/base';
 
 // Simple hash functions using crypto-js
 function sha256Hash(data: Uint8Array): Uint8Array {
@@ -78,15 +78,16 @@ function privateKeyToWIF(privateKey: Uint8Array): string {
   return base58check(sha256ForBase58).encode(prefixed);
 }
 
-// Genera dirección Bitcoin desde clave pública comprimida
-function publicKeyToAddress(publicKey: Uint8Array): string {
+// Genera dirección Bitcoin Native SegWit (bech32) desde clave pública comprimida
+function publicKeyToBech32Address(publicKey: Uint8Array): string {
   // SHA256 -> RIPEMD160
   const sha256Result = sha256Hash(publicKey);
   const hash160 = ripemd160Hash(sha256Result);
   
-  // Prefix 0x00 para mainnet P2PKH
-  const prefixed = new Uint8Array([0x00, ...hash160]);
-  return base58check(sha256ForBase58).encode(prefixed);
+  // Convertir a formato bech32 con witness version 0
+  const words = bech32.toWords(hash160);
+  const wordsWithVersion = [0, ...words]; // witness version 0
+  return bech32.encode('bc', wordsWithVersion);
 }
 
 // Deriva cuentas ETH y BTC desde el mnemonic usando BIP44
@@ -94,12 +95,12 @@ export async function deriveAccounts(mnemonic: string): Promise<WalletAccounts> 
   // Derivar cuenta Ethereum usando ethers.js
   const ethWallet = ethers.Wallet.fromPhrase(mnemonic);
   
-  // Derivar cuenta Bitcoin usando BIP44 path: m/44'/0'/0'/0/0
+  // Derivar cuenta Bitcoin usando BIP84 path para Native SegWit: m/84'/0'/0'/0/0
   const seed = await bip39.mnemonicToSeed(mnemonic);
   const masterKey = HDKey.fromMasterSeed(seed);
   
-  // BIP44 path para Bitcoin mainnet: m/44'/0'/0'/0/0
-  const btcPath = "m/44'/0'/0'/0/0";
+  // BIP84 path para Bitcoin Native SegWit (bc1q): m/84'/0'/0'/0/0
+  const btcPath = "m/84'/0'/0'/0/0";
   const btcKey = masterKey.derive(btcPath);
   
   if (!btcKey.privateKey || !btcKey.publicKey) {
@@ -107,7 +108,7 @@ export async function deriveAccounts(mnemonic: string): Promise<WalletAccounts> 
   }
   
   const btcPrivateKeyWIF = privateKeyToWIF(btcKey.privateKey);
-  const btcAddress = publicKeyToAddress(btcKey.publicKey);
+  const btcAddress = publicKeyToBech32Address(btcKey.publicKey);
   
   return {
     eth: {

@@ -1,10 +1,11 @@
 import { useState, useRef } from "react";
-import { ArrowLeft, Upload, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X, RotateCcw } from "lucide-react";
+import { ArrowLeft, Upload, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X, RotateCcw, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Wallet, decryptVault, EncryptedVault } from "@/lib/model";
+import { Wallet, decryptVault, encryptVault, EncryptedVault } from "@/lib/model";
 import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
 import CryptoCard from "@/components/extension/CryptoCard";
 import GlobalControls from "@/components/extension/GlobalControls";
+import PasswordStrengthIndicator from "@/components/extension/PasswordStrengthIndicator";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import {
@@ -34,6 +35,12 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showResetFinal, setShowResetFinal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Export with new password states
+  const [exportPassword, setExportPassword] = useState("");
+  const [exportConfirmPassword, setExportConfirmPassword] = useState("");
+  const [showExportPassword, setShowExportPassword] = useState(false);
+  const [exportError, setExportError] = useState("");
 
   const handleFileSelect = (file: File) => {
     setError("");
@@ -144,10 +151,59 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
     setPassword("");
     setSelectedFile(null);
     setError("");
+    setExportPassword("");
+    setExportConfirmPassword("");
+    setExportError("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
     toast.success(t("import.resetSuccess"));
+  };
+
+  const handleExportWithNewPassword = () => {
+    if (!wallet) return;
+    
+    setExportError("");
+
+    if (!exportPassword.trim()) {
+      setExportError(t("generate.errorPassword"));
+      toast.error(t("generate.errorPassword"));
+      return;
+    }
+
+    if (exportPassword.length < 8) {
+      setExportError(t("generate.errorPasswordLength"));
+      toast.error(t("generate.errorPasswordLength"));
+      return;
+    }
+
+    if (!exportConfirmPassword.trim()) {
+      setExportError(t("generate.errorConfirm"));
+      toast.error(t("generate.errorConfirm"));
+      return;
+    }
+
+    if (exportPassword !== exportConfirmPassword) {
+      setExportError(t("generate.errorMatch"));
+      toast.error(t("generate.errorMatch"));
+      return;
+    }
+
+    // Encrypt with new password
+    const encryptedData = encryptVault(wallet, exportPassword);
+    
+    const blob = new Blob([JSON.stringify(encryptedData, null, 2)], { type: 'application/octet-stream' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pokebit-vault-${Date.now()}.aes`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    // Clear export fields after successful export
+    setExportPassword("");
+    setExportConfirmPassword("");
+    toast.success(t("generate.exported"));
   };
 
   return (
@@ -316,6 +372,59 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
                 privateKey={wallet.accounts.btc.privateKey}
                 publicAddress={wallet.accounts.btc.publicAddress}
               />
+            </div>
+
+            {/* Export with new password section */}
+            <div className="mt-8 p-4 bg-secondary/30 border border-border/50 rounded-xl">
+              <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+                <Download className="w-4 h-4" />
+                {t("import.exportNewPassword")}
+              </h3>
+              
+              <div className="space-y-3">
+                <div className="relative">
+                  <input
+                    type={showExportPassword ? "text" : "password"}
+                    value={exportPassword}
+                    onChange={(e) => { setExportPassword(e.target.value); setExportError(""); }}
+                    placeholder={t("import.newPassword")}
+                    className="w-full px-3 py-2 pr-10 bg-input border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowExportPassword(!showExportPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {showExportPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+
+                <PasswordStrengthIndicator password={exportPassword} />
+
+                <input
+                  type={showExportPassword ? "text" : "password"}
+                  value={exportConfirmPassword}
+                  onChange={(e) => { setExportConfirmPassword(e.target.value); setExportError(""); }}
+                  placeholder={t("import.repeatNewPassword")}
+                  className="w-full px-3 py-2 bg-input border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
+
+                {exportError && (
+                  <div className="flex items-center gap-2 p-2 bg-destructive/10 border border-destructive/30 rounded-lg text-destructive text-xs">
+                    <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                    {exportError}
+                  </div>
+                )}
+
+                <Button
+                  variant="success"
+                  className="w-full"
+                  onClick={handleExportWithNewPassword}
+                >
+                  <Download className="w-4 h-4" />
+                  {t("import.exportButton")}
+                </Button>
+              </div>
             </div>
           </div>
         )}
