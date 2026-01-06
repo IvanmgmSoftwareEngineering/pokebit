@@ -1,4 +1,5 @@
 import { Rocket, FolderOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PopupHeader from "@/components/extension/PopupHeader";
 import GlobalControls from "@/components/extension/GlobalControls";
@@ -71,6 +72,14 @@ const PopupMainView = ({ onGenerate, onImport }: PopupMainViewProps) => {
       <footer className="px-5 py-4 border-t border-border/50">
         <p className="text-center text-xs text-muted-foreground">
           {t("main.footer")}
+        </p>
+        <p className="text-center mt-2">
+          <Link 
+            to="/privacy" 
+            className="text-xs text-primary hover:text-primary/80 hover:underline transition-colors"
+          >
+            Privacy Policy
+          </Link>
         </p>
       </footer>
     </div>
