@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { ArrowLeft, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X, RotateCcw, Download } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X, RotateCcw, Download, HelpCircle } from "lucide-react";
 import pokeBitLogo from "@/assets/pokebit-logo.png";
 import { Button } from "@/components/ui/button";
 import { Wallet, decryptVault, encryptVault, EncryptedVault } from "@/lib/model";
@@ -385,10 +385,13 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
 
             {/* Export with new password section */}
             <div className="mt-8 p-4 bg-secondary/30 border border-border/50 rounded-xl">
-              <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-                <Download className="w-4 h-4" />
-                {t("import.exportNewPassword")}
-              </h3>
+              <div className="flex items-center gap-2 mb-4">
+                <Download className="w-4 h-4 text-foreground" />
+                <h3 className="text-sm font-semibold text-foreground">
+                  {t("import.exportNewPassword")}
+                </h3>
+                <ImportInfoPopup />
+              </div>
               
               <div className="space-y-3">
                 <div className="relative">
