@@ -7,6 +7,7 @@ import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
 import CryptoCard from "@/components/extension/CryptoCard";
 import LoadingSpinner from "@/components/extension/LoadingSpinner";
 import PasswordStrengthIndicator from "@/components/extension/PasswordStrengthIndicator";
+import DerivationInfoPopup from "@/components/extension/DerivationInfoPopup";
 import { generateWallet, encryptVault, Wallet, WordCount } from "@/lib/model";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
@@ -124,6 +125,7 @@ const PopupGenerateView = ({ onBack, initialWordCount = 12 }: PopupGenerateViewP
             <div className="mt-5">
               <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                 {t("generate.derivedAccounts")}
+                <DerivationInfoPopup />
               </h3>
               
               <div className="space-y-3">

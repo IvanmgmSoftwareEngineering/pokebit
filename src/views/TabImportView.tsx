@@ -6,6 +6,8 @@ import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
 import CryptoCard from "@/components/extension/CryptoCard";
 import GlobalControls from "@/components/extension/GlobalControls";
 import PasswordStrengthIndicator from "@/components/extension/PasswordStrengthIndicator";
+import ImportInfoPopup from "@/components/extension/ImportInfoPopup";
+import DerivationInfoPopup from "@/components/extension/DerivationInfoPopup";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 import {
@@ -287,9 +289,12 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                {t("import.passwordLabel")}
-              </label>
+              <div className="flex items-center gap-2 mb-2">
+                <label className="block text-sm font-medium text-foreground">
+                  {t("import.passwordLabel")}
+                </label>
+                <ImportInfoPopup />
+              </div>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -354,6 +359,7 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
             {/* Derived accounts */}
             <h3 className="text-lg font-semibold text-foreground mt-6 mb-4 flex items-center gap-2">
               {t("generate.derivedAccounts")}
+              <DerivationInfoPopup />
             </h3>
 
             <div className="space-y-4">
