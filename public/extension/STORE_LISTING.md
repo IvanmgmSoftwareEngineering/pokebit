@@ -129,7 +129,12 @@ PokeBit por doctor.bitcoin | Cryptovault 2026
 
 ## Categoría recomendada
 ```
-Productivity
+Developer Tools → Security
+```
+
+O alternativamente en Chrome Web Store:
+```
+Accessibility → Security & Privacy
 ```
 
 ## Tags/Keywords
