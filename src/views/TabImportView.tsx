@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
-import { ArrowLeft, Upload, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X, RotateCcw, Download } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, CheckCircle, AlertCircle, FileUp, X, RotateCcw, Download } from "lucide-react";
+import pokeBitLogo from "@/assets/pokebit-logo.png";
 import { Button } from "@/components/ui/button";
 import { Wallet, decryptVault, encryptVault, EncryptedVault } from "@/lib/model";
 import SeedPhraseDisplay from "@/components/extension/SeedPhraseDisplay";
@@ -216,11 +217,13 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
 
         {/* Header */}
         <header className="text-center mb-10 mt-4">
-          <div className="relative inline-flex items-center justify-center w-24 h-24 mb-6">
-            <div className="absolute inset-0 rounded-full bg-primary/20 blur-2xl animate-pulse" />
-            <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/50 flex items-center justify-center">
-              <Upload className="w-12 h-12 text-primary" />
-            </div>
+          <div className="relative inline-flex items-center justify-center w-28 h-28 mb-6">
+            <div className="absolute inset-2 rounded-full bg-primary/30 blur-xl animate-pulse" />
+            <img 
+              src={pokeBitLogo} 
+              alt="PokeBit" 
+              className="relative w-28 h-28 drop-shadow-2xl"
+            />
           </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">{t("import.title")}</h1>
           <p className="text-muted-foreground">
@@ -336,7 +339,7 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
                 </>
               ) : (
                 <>
-                  <Upload className="w-5 h-5" />
+                  <FileUp className="w-5 h-5" />
                   {t("import.importButton")}
                 </>
               )}
