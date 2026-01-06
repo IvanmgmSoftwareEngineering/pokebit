@@ -3,6 +3,7 @@ import { Copy, Check, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
+import Bip39InfoPopup from "./Bip39InfoPopup";
 
 interface SeedPhraseDisplayProps {
   seedPhrase: string;
@@ -11,7 +12,7 @@ interface SeedPhraseDisplayProps {
 const SeedPhraseDisplay = ({ seedPhrase }: SeedPhraseDisplayProps) => {
   const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const words = seedPhrase.split(" ");
 
   const handleCopy = async () => {
@@ -27,14 +28,17 @@ const SeedPhraseDisplay = ({ seedPhrase }: SeedPhraseDisplayProps) => {
         <label className="text-sm font-medium text-foreground flex items-center gap-2">
           {t("seedPhrase.title")}
         </label>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setVisible(!visible)}
-          className="text-xs"
-        >
-          {visible ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Bip39InfoPopup />
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setVisible(!visible)}
+            className="text-xs"
+          >
+            {visible ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
+          </Button>
+        </div>
       </div>
 
       <div className="bg-input/30 rounded-xl p-4 border border-border/50 mb-3">
