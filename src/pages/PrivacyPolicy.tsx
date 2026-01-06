@@ -133,7 +133,7 @@ const PrivacyPolicy = () => {
               Si tiene preguntas sobre esta política de privacidad, puede contactarnos en:
             </p>
             <p className="text-primary font-medium mt-2">
-              doctor.bitcoin@proton.me
+              joamgm88@gmail.com
             </p>
           </section>
 
