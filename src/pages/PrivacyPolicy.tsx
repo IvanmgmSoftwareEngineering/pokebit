@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import GlobalControls from "@/components/extension/GlobalControls";
 
-const PrivacyPolicy = forwardRef<HTMLDivElement>((_, ref) => {
+const PrivacyPolicy = forwardRef<HTMLDivElement, object>(function PrivacyPolicy(_, ref) {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
 
