@@ -78,7 +78,7 @@ const PopupMainView = ({ onGenerate, onImport }: PopupMainViewProps) => {
             to="/privacy" 
             className="text-xs text-primary hover:text-primary/80 hover:underline transition-colors"
           >
-            Privacy Policy
+            {t("main.privacyLink")}
           </Link>
         </p>
       </footer>
