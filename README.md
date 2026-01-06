@@ -105,7 +105,6 @@ Download from the Chrome Web Store for quick access from your browser toolbar:
 - ✅ Use **strong passwords** (8+ characters, mixed case, numbers, symbols)
 - ✅ Store your `.aes` file in multiple secure locations
 - ❌ **Never share** your seed phrase or private keys with anyone
-- ❌ **Never enter** your seed phrase on any website other than PokeBit
 - ❌ There is **no password recovery** - if you lose it, you lose access
 
 ---
@@ -121,7 +120,7 @@ Download from the Chrome Web Store for quick access from your browser toolbar:
 
 ## 💡 The PokeBit Philosophy
 
-> **"Your Keys, Your Cryptos"**
+> **"Your Private Keys, Your Cryptos"**
 
 We built PokeBit because we believe:
 - You should **own** your cryptocurrency, not trust it to exchanges
@@ -133,16 +132,16 @@ We built PokeBit because we believe:
 
 ## 📞 Support
 
-- 📧 Email: doctor.bitcoin@cryptovault.dev
-- 🐦 Twitter: [@pokebit_wallet](#)
-- 💬 Discord: [PokeBit Community](#)
+- 📧 Email: joamgm88@gmail.com
+- 👨‍💻 Creator: doctor.bitcoin@ud.me
+- 🏢 Company: hotel.nft@ud.me
 
 ---
 
 <p align="center">
-  <strong>PokeBit</strong> by doctor.bitcoin | Cryptovault © 2026
+  <strong>©2026 PokeBit</strong> by doctor.bitcoin
 </p>
 
 <p align="center">
-  <em>Generate. Encrypt. Own.</em>
+  <a href="https://pokebit.lovable.app/privacy">📜 Privacy Policy</a>
 </p>
