@@ -690,7 +690,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem("pokebit-language");
-    return (saved as Language) || "es";
+    return (saved as Language) || "en";
   });
 
   const handleSetLanguage = (lang: Language) => {
