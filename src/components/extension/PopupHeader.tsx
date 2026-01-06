@@ -1,4 +1,4 @@
-import { Shield } from "lucide-react";
+import pokeBitIcon from "/extension/icons/icon128.png";
 
 interface PopupHeaderProps {
   title: string;
@@ -12,10 +12,12 @@ const PopupHeader = ({ title, subtitle }: PopupHeaderProps) => {
         {/* Glow effect */}
         <div className="absolute inset-0 rounded-full bg-primary/20 blur-xl animate-pulse-glow" />
         
-        {/* Main circle */}
-        <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/50 flex items-center justify-center">
-          <Shield className="w-10 h-10 text-primary" />
-        </div>
+        {/* Main icon */}
+        <img 
+          src={pokeBitIcon} 
+          alt="PokeBit" 
+          className="relative w-20 h-20 rounded-full drop-shadow-lg"
+        />
       </div>
       
       <h1 className="text-2xl font-bold text-foreground tracking-tight mb-1">
