@@ -1,4 +1,4 @@
-import pokeBitIcon from "/extension/icons/icon128.png";
+import pokeBitLogo from "@/assets/pokebit-logo.png";
 
 interface PopupHeaderProps {
   title: string;
@@ -8,15 +8,15 @@ interface PopupHeaderProps {
 const PopupHeader = ({ title, subtitle }: PopupHeaderProps) => {
   return (
     <header className="text-center py-6 animate-fade-in">
-      <div className="relative inline-flex items-center justify-center w-20 h-20 mb-4">
+      <div className="relative inline-flex items-center justify-center w-28 h-28 mb-4">
         {/* Glow effect */}
-        <div className="absolute inset-0 rounded-full bg-primary/20 blur-xl animate-pulse-glow" />
+        <div className="absolute inset-2 rounded-full bg-primary/30 blur-xl animate-pulse-glow" />
         
-        {/* Main icon */}
+        {/* Main icon - larger, no background */}
         <img 
-          src={pokeBitIcon} 
+          src={pokeBitLogo} 
           alt="PokeBit" 
-          className="relative w-20 h-20 rounded-full drop-shadow-lg"
+          className="relative w-28 h-28 drop-shadow-2xl"
         />
       </div>
       
