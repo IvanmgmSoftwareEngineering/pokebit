@@ -156,7 +156,10 @@
 
 @layer components {
   .popup-frame {
-    @apply w-[420px] min-h-[520px] bg-background rounded-2xl border border-border overflow-hidden;
+    width: 420px;
+    min-width: 420px;
+    min-height: 520px;
+    @apply bg-background rounded-2xl border border-border overflow-hidden;
     box-shadow: var(--shadow-card), var(--shadow-glow);
   }
 
