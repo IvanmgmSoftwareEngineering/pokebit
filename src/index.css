@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+/* Note: External font imports removed for Chrome extension CSP compliance.
+   Using system fonts for better performance and offline compatibility. */
 
 @layer base {
   :root {
@@ -56,9 +57,9 @@
     --shadow-glow: 0 0 30px hsl(199 89% 48% / 0.2);
     --shadow-card: 0 4px 20px hsl(222 47% 2% / 0.4);
 
-    /* Fonts */
-    --font-display: 'Space Grotesk', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    /* Fonts - Using system fonts for Chrome extension CSP compliance */
+    --font-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'Courier New', Consolas, 'Liberation Mono', monospace;
 
     --sidebar-background: 222 47% 6%;
     --sidebar-foreground: 210 40% 96%;
