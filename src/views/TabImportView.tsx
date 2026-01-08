@@ -210,23 +210,23 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto px-6 py-4">
+    <div className="h-full overflow-y-auto bg-background">
+      <div className="max-w-full mx-auto px-4 py-4">
         {/* Global Controls */}
         <GlobalControls />
 
-        {/* Header */}
-        <header className="text-center mb-10 mt-4">
-          <div className="relative inline-flex items-center justify-center w-28 h-28 mb-6">
-            <div className="absolute inset-2 rounded-full bg-primary/30 blur-xl animate-pulse" />
+        {/* Header - compact for side panel */}
+        <header className="text-center mb-6 mt-2">
+          <div className="relative inline-flex items-center justify-center w-16 h-16 mb-3">
+            <div className="absolute inset-1 rounded-full bg-primary/30 blur-lg animate-pulse" />
             <img 
               src={pokeBitLogo} 
               alt="PokeBit" 
-              className="relative w-28 h-28 drop-shadow-2xl"
+              className="relative w-16 h-16 drop-shadow-xl"
             />
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">{t("import.title")}</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl font-bold text-foreground mb-1">{t("import.title")}</h1>
+          <p className="text-sm text-muted-foreground">
             {t("import.subtitle")}
           </p>
         </header>
