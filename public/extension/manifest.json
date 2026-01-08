@@ -2,18 +2,21 @@
   "manifest_version": 3,
   "name": "PokeBit - High Entropy Wallet Generator",
   "short_name": "PokeBit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generate high-entropy BIP-39 seed phrases with derived private keys and public addresses for ETH and BTC. 100% offline, zero data collection.",
   "author": "doctor.bitcoin",
   
   "action": {
-    "default_popup": "index.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     },
-    "default_title": "PokeBit Wallet Generator"
+    "default_title": "Open PokeBit Side Panel"
+  },
+  
+  "side_panel": {
+    "default_path": "index.html"
   },
   
   "icons": {
@@ -22,7 +25,9 @@
     "128": "icons/icon128.png"
   },
   
-  "permissions": [],
+  "permissions": [
+    "sidePanel"
+  ],
   
   "background": {
     "service_worker": "background.js"

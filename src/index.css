@@ -155,12 +155,16 @@
 }
 
 @layer components {
+  /* Side Panel mode - full height, fixed width */
   .popup-frame {
-    width: 420px;
-    min-width: 420px;
-    min-height: 520px;
-    @apply bg-background rounded-2xl border border-border overflow-hidden;
-    box-shadow: var(--shadow-card), var(--shadow-glow);
+    width: 100%;
+    min-width: 320px;
+    max-width: 420px;
+    min-height: 100vh;
+    height: 100vh;
+    @apply bg-background border-l border-border overflow-y-auto;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .tab-frame {
