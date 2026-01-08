@@ -7,21 +7,21 @@ PokeBit - High Entropy Wallet Generator
 
 ## Descripción corta (máx 132 caracteres)
 ```
-Generate secure crypto wallets with BIP-39 seed phrases. 100% offline, zero data collection. Your keys, your cryptos.
+Generate high-entropy BIP-39 seed phrases with derived private keys and public addresses. 100% offline, zero data collection.
 ```
 
 ## Descripción corta (Español)
 ```
-Genera wallets crypto seguras con frases BIP-39. 100% offline, cero recopilación de datos. Tus claves, tus cryptos.
+Genera frases semilla BIP-39 de alta entropía con claves privadas y direcciones públicas derivadas. 100% offline, cero datos.
 ```
 
 ## Descripción larga (máx 16,000 caracteres)
 
 ### English:
 ```
-🔐 PokeBit - High Entropy Wallet Generator
+🔐 PokeBit - High Entropy Seed Phrase Generator
 
-Generate secure cryptocurrency wallets with military-grade security, completely offline.
+Generate secure BIP-39 seed phrases (12 or 24 words) with derived private keys and public addresses for Ethereum and Bitcoin. All operations run 100% offline with military-grade security.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -29,7 +29,7 @@ Generate secure cryptocurrency wallets with military-grade security, completely 
 
 1️⃣ Click the PokeBit extension icon in your browser toolbar
 2️⃣ Click "GENERATE VAULT (12 WORDS)" or "GENERATE VAULT (24 WORDS)" button
-3️⃣ Your BIP-39 seed phrase and derived ETH/BTC addresses are instantly generated!
+3️⃣ Your BIP-39 seed phrase, private keys, and public addresses are instantly generated!
 
 Optional: Set a password and click "Export Vault" to save an encrypted backup file.
 
@@ -37,16 +37,16 @@ Optional: Set a password and click "Export Vault" to save an encrypted backup fi
 
 🌟 KEY FEATURES:
 
-✅ High-Entropy Generation
-Generate 12 or 24-word BIP-39 seed phrases using cryptographically secure random number generation. Each word has an equal 1/2048 probability of being selected.
+✅ High-Entropy Seed Phrase Generation
+Generate 12 or 24-word BIP-39 compliant seed phrases using cryptographically secure random number generation. Each word has an equal 1/2048 probability of being selected from the standard BIP-39 wordlist.
 
-✅ Multi-Currency Support
-Automatically derives wallet addresses for:
-• Ethereum (ETH) - BIP-44 path m/44'/60'/0'/0/0
-• Bitcoin (BTC) - BIP-84 native SegWit (bc1q...) path m/84'/0'/0'/0/0
+✅ Automatic Key Derivation
+From your seed phrase, we automatically derive:
+• Ethereum (ETH) - Private key + Public address (BIP-44 path m/44'/60'/0'/0/0)
+• Bitcoin (BTC) - Private key (WIF) + Native SegWit address bc1q... (BIP-84 path m/84'/0'/0'/0/0)
 
 ✅ Military-Grade Encryption
-Export your wallet as an AES-256 encrypted file (.aes). Share it safely via email or cloud storage - without the password, it is unreadable.
+Export your seed phrase and keys as an AES-256 encrypted file (.aes). Share it safely via email or cloud storage - without the password, it is unreadable.
 
 ✅ 100% Offline Operation
 All cryptographic operations happen locally on YOUR device. No servers, no APIs, no data transmission. Ever.
@@ -98,9 +98,9 @@ PokeBit by doctor.bitcoin | Cryptovault 2026
 
 ### Español:
 ```
-🔐 PokeBit - Generador de Wallets de Alta Entropía
+🔐 PokeBit - Generador de Frases Semilla de Alta Entropía
 
-Genera wallets de criptomonedas seguras con seguridad de grado militar, completamente offline.
+Genera frases semilla BIP-39 seguras (12 o 24 palabras) con claves privadas y direcciones públicas derivadas para Ethereum y Bitcoin. Todas las operaciones se ejecutan 100% offline con seguridad de grado militar.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -108,7 +108,7 @@ Genera wallets de criptomonedas seguras con seguridad de grado militar, completa
 
 1️⃣ Haz clic en el icono de la extensión PokeBit en la barra de herramientas del navegador
 2️⃣ Haz clic en el botón "GENERAR BÓVEDA (12 PALABRAS)" o "GENERAR BÓVEDA (24 PALABRAS)"
-3️⃣ ¡Tu frase semilla BIP-39 y las direcciones ETH/BTC derivadas se generan instantáneamente!
+3️⃣ ¡Tu frase semilla BIP-39, claves privadas y direcciones públicas se generan instantáneamente!
 
 Opcional: Establece una contraseña y haz clic en "Exportar Bóveda" para guardar un archivo de respaldo encriptado.
 
@@ -116,16 +116,16 @@ Opcional: Establece una contraseña y haz clic en "Exportar Bóveda" para guarda
 
 🌟 CARACTERÍSTICAS PRINCIPALES:
 
-✅ Generación de Alta Entropía
-Genera frases semilla BIP-39 de 12 o 24 palabras usando generación de números aleatorios criptográficamente seguros. Cada palabra tiene una probabilidad igual de 1/2048 de ser seleccionada.
+✅ Generación de Frases Semilla de Alta Entropía
+Genera frases semilla BIP-39 de 12 o 24 palabras usando generación de números aleatorios criptográficamente seguros. Cada palabra tiene una probabilidad igual de 1/2048 de ser seleccionada del diccionario estándar BIP-39.
 
-✅ Soporte Multi-Moneda
-Deriva automáticamente direcciones de wallet para:
-• Ethereum (ETH) - ruta BIP-44 m/44'/60'/0'/0/0
-• Bitcoin (BTC) - SegWit nativo BIP-84 (bc1q...) ruta m/84'/0'/0'/0/0
+✅ Derivación Automática de Claves
+Desde tu frase semilla, derivamos automáticamente:
+• Ethereum (ETH) - Clave privada + Dirección pública (ruta BIP-44 m/44'/60'/0'/0/0)
+• Bitcoin (BTC) - Clave privada (WIF) + Dirección SegWit nativa bc1q... (ruta BIP-84 m/84'/0'/0'/0/0)
 
 ✅ Encriptación de Grado Militar
-Exporta tu wallet como un archivo encriptado AES-256 (.aes). Compártelo de forma segura por email o almacenamiento en la nube - sin la contraseña, es ilegible.
+Exporta tu frase semilla y claves como un archivo encriptado AES-256 (.aes). Compártelo de forma segura por email o almacenamiento en la nube - sin la contraseña, es ilegible.
 
 ✅ Operación 100% Offline
 Todas las operaciones criptográficas ocurren localmente en TU dispositivo. Sin servidores, sin APIs, sin transmisión de datos. Nunca.
@@ -134,7 +134,7 @@ Todas las operaciones criptográficas ocurren localmente en TU dispositivo. Sin 
 No recopilamos, almacenamos ni transmitimos NINGÚN dato. Sin analíticas, sin seguimiento, sin cookies. Tu privacidad es absoluta.
 
 ✅ Importar y Exportar
-Haz backup y restaura tus wallets fácilmente con archivos .aes encriptados. Cambia contraseñas en cualquier momento al re-exportar.
+Haz backup y restaura tus datos fácilmente con archivos .aes encriptados. Cambia contraseñas en cualquier momento al re-exportar.
 
 ✅ Soporte Multi-Idioma
 Disponible en Inglés, Español, Chino, Hindi y Ruso.
