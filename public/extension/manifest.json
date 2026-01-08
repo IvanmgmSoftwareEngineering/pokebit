@@ -3,7 +3,7 @@
   "name": "PokeBit - High Entropy Wallet Generator",
   "short_name": "PokeBit",
   "version": "1.0.0",
-  "description": "Generate secure cryptocurrency wallets with high-entropy BIP-39 seed phrases. 100% offline, no data collection. Your keys, your cryptos.",
+  "description": "Generate high-entropy BIP-39 seed phrases with derived private keys and public addresses for ETH and BTC. 100% offline, zero data collection.",
   "author": "doctor.bitcoin",
   
   "action": {
