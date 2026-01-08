@@ -25,6 +25,16 @@ Generate secure cryptocurrency wallets with military-grade security, completely 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+📌 HOW TO USE (Simple 3-Step Process):
+
+1️⃣ Click the PokeBit extension icon in your browser toolbar
+2️⃣ Click "GENERATE VAULT (12 WORDS)" or "GENERATE VAULT (24 WORDS)" button
+3️⃣ Your BIP-39 seed phrase and derived ETH/BTC addresses are instantly generated!
+
+Optional: Set a password and click "Export Vault" to save an encrypted backup file.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 🌟 KEY FEATURES:
 
 ✅ High-Entropy Generation
@@ -36,13 +46,13 @@ Automatically derives wallet addresses for:
 • Bitcoin (BTC) - BIP-84 native SegWit (bc1q...) path m/84'/0'/0'/0/0
 
 ✅ Military-Grade Encryption
-Export your wallet as an AES-256 encrypted file (.aes). Share it safely via email or cloud storage - without the password, it's unreadable.
+Export your wallet as an AES-256 encrypted file (.aes). Share it safely via email or cloud storage - without the password, it is unreadable.
 
 ✅ 100% Offline Operation
 All cryptographic operations happen locally on YOUR device. No servers, no APIs, no data transmission. Ever.
 
 ✅ Zero Data Collection
-We don't collect, store, or transmit ANY data. No analytics, no tracking, no cookies. Your privacy is absolute.
+We do not collect, store, or transmit ANY data. No analytics, no tracking, no cookies. Your privacy is absolute.
 
 ✅ Import & Export
 Easily backup and restore your wallets with encrypted .aes files. Change passwords anytime when re-exporting.
@@ -59,6 +69,7 @@ Available in English, Spanish, Chinese, Hindi, and Russian.
 • AES-256 encryption for vault files
 • No external connections or dependencies
 • Open source and auditable
+• NO browser permissions required
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -74,7 +85,7 @@ Available in English, Spanish, Chinese, Hindi, and Russian.
 🎯 PERFECT FOR:
 
 • Crypto beginners who want simple, secure wallet generation
-• Privacy-conscious users who don't trust online services
+• Privacy-conscious users who do not trust online services
 • Cold storage enthusiasts
 • Anyone who believes in "Your Keys, Your Cryptos"
 
@@ -90,6 +101,16 @@ PokeBit by doctor.bitcoin | Cryptovault 2026
 🔐 PokeBit - Generador de Wallets de Alta Entropía
 
 Genera wallets de criptomonedas seguras con seguridad de grado militar, completamente offline.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 CÓMO USAR (Proceso Simple de 3 Pasos):
+
+1️⃣ Haz clic en el icono de la extensión PokeBit en la barra de herramientas del navegador
+2️⃣ Haz clic en el botón "GENERAR BÓVEDA (12 PALABRAS)" o "GENERAR BÓVEDA (24 PALABRAS)"
+3️⃣ ¡Tu frase semilla BIP-39 y las direcciones ETH/BTC derivadas se generan instantáneamente!
+
+Opcional: Establece una contraseña y haz clic en "Exportar Bóveda" para guardar un archivo de respaldo encriptado.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -117,6 +138,24 @@ Haz backup y restaura tus wallets fácilmente con archivos .aes encriptados. Cam
 
 ✅ Soporte Multi-Idioma
 Disponible en Inglés, Español, Chino, Hindi y Ruso.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔒 SEGURIDAD PRIMERO:
+
+• Lista de palabras compatible con BIP-39 (2048 palabras)
+• Derivación determinista jerárquica BIP-32/44/84
+• Encriptación AES-256 para archivos de bóveda
+• Sin conexiones o dependencias externas
+• Código abierto y auditable
+• NO requiere permisos del navegador
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 Recuerda: Tus claves, Tus cryptos.
+
+PokeBit por doctor.bitcoin | Cryptovault 2026
+```
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
