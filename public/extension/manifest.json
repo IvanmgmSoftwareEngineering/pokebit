@@ -22,9 +22,7 @@
     "128": "icons/icon128.png"
   },
   
-  "permissions": [
-    "storage"
-  ],
+  "permissions": [],
   
   "background": {
     "service_worker": "background.js"

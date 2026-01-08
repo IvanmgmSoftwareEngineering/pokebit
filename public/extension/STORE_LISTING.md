@@ -146,14 +146,9 @@ cryptocurrency, wallet, bitcoin, ethereum, bip39, seed phrase, crypto, security,
 
 ## Justificación de Permisos (para el formulario de Chrome Web Store)
 
-### storage
+### No se requieren permisos especiales
 ```
-Used to save user preferences (language selection and light/dark theme) locally in the browser. No personal data is stored. This ensures preferences persist between sessions without any server communication.
-```
-
-### tabs (si lo añades)
-```
-Used only to open the wallet import view in a full browser tab for better user experience when handling encrypted vault files. No browsing data is accessed or collected.
+PokeBit does NOT require any special browser permissions. The extension operates entirely within its own context using only standard browser APIs (localStorage for preferences). This ensures maximum privacy and security - we have no access to your browsing data, tabs, or personal information.
 ```
 
 ---
