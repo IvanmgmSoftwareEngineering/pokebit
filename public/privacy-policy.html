@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - PokeBit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            color: #e4e4e7;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 16px;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            color: #a1a1aa;
+            font-size: 1rem;
+        }
+        .last-updated {
+            color: #71717a;
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+        section {
+            margin-bottom: 32px;
+        }
+        h2 {
+            font-size: 1.25rem;
+            color: #22d3ee;
+            margin-bottom: 12px;
+        }
+        p {
+            color: #a1a1aa;
+            margin-bottom: 12px;
+        }
+        ul {
+            color: #a1a1aa;
+            margin-left: 24px;
+            margin-bottom: 12px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .highlight-box {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 32px;
+        }
+        .highlight-box p {
+            color: #22d3ee;
+            font-weight: 500;
+            margin: 0;
+        }
+        footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        footer p {
+            font-size: 0.875rem;
+            color: #71717a;
+        }
+        a {
+            color: #22d3ee;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .contact-email {
+            color: #22d3ee;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="./pokebit-logo-original.png" alt="PokeBit Logo" class="logo">
+            <h1>Privacy Policy</h1>
+            <p class="subtitle">PokeBit - High Entropy Wallet Generator</p>
+            <p class="last-updated">Last updated: January 9, 2026</p>
+        </header>
+
+        <main>
+            <section>
+                <h2>1. Introduction</h2>
+                <p>PokeBit is a cryptocurrency wallet generator that operates 100% offline and locally on your device. Your privacy and security are our top priority. This privacy policy explains how PokeBit handles (or rather, doesn't handle) your data.</p>
+            </section>
+
+            <section>
+                <h2>2. Data Collection</h2>
+                <p>PokeBit does NOT collect, store, or transmit any personal data. Specifically:</p>
+                <ul>
+                    <li>No seed phrases are stored or transmitted</li>
+                    <li>No private keys leave your device</li>
+                    <li>No public addresses are logged</li>
+                    <li>No usage analytics or tracking</li>
+                    <li>No cookies or local storage of sensitive data</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>3. How PokeBit Works</h2>
+                <p>All cryptographic operations happen entirely in your browser:</p>
+                <ul>
+                    <li>Entropy generation uses the Web Crypto API (window.crypto.getRandomValues)</li>
+                    <li>BIP-39 mnemonic generation is performed locally</li>
+                    <li>Key derivation follows BIP-32/BIP-44 standards locally</li>
+                    <li>No internet connection is required for core functionality</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>4. Data Storage</h2>
+                <p>PokeBit intentionally avoids storing sensitive information:</p>
+                <ul>
+                    <li>Generated seed phrases are displayed but never saved</li>
+                    <li>Private keys exist only in memory during your session</li>
+                    <li>Closing the application clears all generated data</li>
+                    <li>No data is written to disk, cloud, or external servers</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>5. Third-Party Services</h2>
+                <p>PokeBit does not integrate with any third-party services that could access your data:</p>
+                <ul>
+                    <li>No analytics services (Google Analytics, Mixpanel, etc.)</li>
+                    <li>No advertising networks</li>
+                    <li>No social media integrations</li>
+                    <li>No external API calls with your wallet data</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>6. Security Measures</h2>
+                <p>We implement the following security practices:</p>
+                <ul>
+                    <li>All code runs client-side in your browser</li>
+                    <li>Open-source cryptographic libraries are used</li>
+                    <li>No external dependencies that could leak data</li>
+                    <li>The extension requests minimal permissions</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>7. Your Responsibilities</h2>
+                <p>While PokeBit protects your privacy within the application, you are responsible for securely storing any seed phrases or private keys you generate. We recommend writing them down on paper and storing them in a secure location. Never share your seed phrase with anyone.</p>
+            </section>
+
+            <section>
+                <h2>8. Changes to This Policy</h2>
+                <p>We may update this privacy policy from time to time. Any changes will be reflected in the "Last updated" date at the top of this page. We encourage you to review this policy periodically.</p>
+            </section>
+
+            <section>
+                <h2>9. Contact</h2>
+                <p>If you have any questions about this privacy policy or PokeBit's privacy practices, please contact us at:</p>
+                <p class="contact-email">joamgm88@gmail.com</p>
+            </section>
+
+            <div class="highlight-box">
+                <p>🔐 <strong>Summary:</strong> PokeBit collects zero data. Everything runs locally on your device. Your seed phrases and private keys never leave your browser.</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2026 PokeBit • Designed by doctor.bitcoin</p>
+        </footer>
+    </div>
+</body>
+</html>
