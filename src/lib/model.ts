@@ -5,8 +5,16 @@ import * as bip39 from 'bip39';
 import CryptoJS from 'crypto-js';
 import { HDKey } from '@scure/bip32';
 import { base58check, bech32 } from '@scure/base';
-import { derivePath } from 'ed25519-hd-key';
+import * as ed25519 from '@noble/ed25519';
 import bs58 from 'bs58';
+
+// HMAC-SHA512 usando CryptoJS (compatible con navegador)
+function hmacSha512(key: Uint8Array, data: Uint8Array): Uint8Array {
+  const keyWordArray = CryptoJS.lib.WordArray.create(key as unknown as number[]);
+  const dataWordArray = CryptoJS.lib.WordArray.create(data as unknown as number[]);
+  const hash = CryptoJS.HmacSHA512(dataWordArray, keyWordArray);
+  return wordArrayToUint8Array(hash);
+}
 
 // Simple hash functions using crypto-js
 function sha256Hash(data: Uint8Array): Uint8Array {
@@ -111,27 +119,72 @@ function publicKeyToBech32Address(publicKey: Uint8Array): string {
   return bech32.encode('bc', wordsWithVersion);
 }
 
+// SLIP-10 ed25519 key derivation (browser compatible)
+// Implementación basada en SLIP-0010: https://github.com/satoshilabs/slips/blob/master/slip-0010.md
+const ED25519_CURVE = 'ed25519 seed';
+const HARDENED_OFFSET = 0x80000000;
+
+interface Slip10Result {
+  key: Uint8Array<ArrayBuffer>;
+  chainCode: Uint8Array<ArrayBuffer>;
+}
+
+function slip10DeriveChild(parentKey: Uint8Array, parentChainCode: Uint8Array, index: number): Slip10Result {
+  // Solo soportamos derivación hardened para ed25519
+  if (index < HARDENED_OFFSET) {
+    throw new Error('Ed25519 only supports hardened derivation');
+  }
+  
+  const data = new Uint8Array(37);
+  data[0] = 0x00;
+  data.set(parentKey, 1);
+  data[33] = (index >>> 24) & 0xff;
+  data[34] = (index >>> 16) & 0xff;
+  data[35] = (index >>> 8) & 0xff;
+  data[36] = index & 0xff;
+  
+  const I = hmacSha512(parentChainCode, data);
+  return {
+    key: new Uint8Array(I.slice(0, 32)),
+    chainCode: new Uint8Array(I.slice(32))
+  };
+}
+
+function slip10DerivePath(path: string, seed: Uint8Array): Slip10Result {
+  // Derivar master key
+  const I = hmacSha512(new TextEncoder().encode(ED25519_CURVE), seed);
+  let key: Uint8Array<ArrayBuffer> = new Uint8Array(I.slice(0, 32));
+  let chainCode: Uint8Array<ArrayBuffer> = new Uint8Array(I.slice(32));
+  
+  // Parsear path (ej: "m/44'/501'/0'/0'")
+  const segments = path.split('/').slice(1); // Quitar 'm'
+  
+  for (const segment of segments) {
+    const hardened = segment.endsWith("'");
+    const indexStr = hardened ? segment.slice(0, -1) : segment;
+    const index = parseInt(indexStr, 10) + (hardened ? HARDENED_OFFSET : 0);
+    
+    const derived = slip10DeriveChild(key, chainCode, index);
+    key = derived.key;
+    chainCode = derived.chainCode;
+  }
+  
+  return { key, chainCode };
+}
+
 // Deriva clave privada Solana usando SLIP-10 ed25519
-async function deriveSolanaAccount(seed: Buffer): Promise<AccountData> {
+async function deriveSolanaAccount(seed: Uint8Array): Promise<AccountData> {
   // Solana usa SLIP-10 con path m/44'/501'/0'/0'
   const solanaPath = "m/44'/501'/0'/0'";
-  const { key } = derivePath(solanaPath, seed.toString('hex'));
+  const { key } = slip10DerivePath(solanaPath, seed);
   
-  // En Solana, la clave privada son los primeros 32 bytes
-  // La clave pública se deriva de la privada usando ed25519
-  // Para Solana, necesitamos el keypair completo (64 bytes: 32 privada + 32 pública)
-  
-  // Importar ed25519 dinámicamente para evitar problemas de ESM
-  const ed25519 = await import('@noble/ed25519');
-  
-  // Derivar clave pública desde la privada
+  // Derivar clave pública desde la privada usando ed25519
   const publicKey = await ed25519.getPublicKeyAsync(key);
   
   // La dirección de Solana es la clave pública codificada en base58
   const publicAddress = bs58.encode(publicKey);
   
   // La clave privada en Solana se representa como el keypair completo (64 bytes)
-  // o solo los 32 bytes de la seed privada en base58
   const privateKeyBytes = new Uint8Array([...key, ...publicKey]);
   const privateKey = bs58.encode(privateKeyBytes);
   
