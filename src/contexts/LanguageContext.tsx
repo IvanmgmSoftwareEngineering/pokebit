@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export type Language = "en" | "es" | "zh" | "hi" | "ru" | "ar";
 
@@ -822,15 +822,26 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  isRTL: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+const RTL_LANGUAGES: Language[] = ["ar"];
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem("pokebit-language");
     return (saved as Language) || "en";
   });
+
+  const isRTL = RTL_LANGUAGES.includes(language);
+
+  // Apply RTL direction to document
+  useEffect(() => {
+    document.documentElement.dir = isRTL ? "rtl" : "ltr";
+    document.documentElement.lang = language;
+  }, [language, isRTL]);
 
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
@@ -842,7 +853,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t, isRTL }}>
       {children}
     </LanguageContext.Provider>
   );
