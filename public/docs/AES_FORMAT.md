@@ -213,12 +213,21 @@ For backwards compatibility, PokeBit also accepts the legacy format when importi
   "mnemonic": "...",
   "accounts": {
     "eth": { "privateKey": "...", "publicAddress": "..." },
-    "btc": { "privateKey": "...", "publicAddress": "..." }
+    "btc": { "privateKey": "...", "publicAddress": "..." },
+    "sol": { "privateKey": "...", "publicAddress": "..." }
   }
 }
 ```
 
-The legacy `eth`/`btc` keys are automatically mapped to `ethereum`/`bitcoin` on import.
+### Alias Mapping
+
+| Legacy Key | Normalized Key |
+|------------|----------------|
+| `eth` | `ethereum` |
+| `btc` | `bitcoin` |
+| `sol` | `solana` |
+
+The legacy keys are automatically mapped to their full network IDs on import.
 
 ## Security Considerations
 
@@ -229,15 +238,23 @@ The legacy `eth`/`btc` keys are automatically mapped to `ethereum`/`bitcoin` on 
 
 ## Compatibility
 
-- ✅ **PokeBit** (this app)
-- ✅ **PokeMetaX** (advanced wallet)
+- ✅ **PokeBit** (this app) - Generates ethereum, bitcoin, solana
+- ✅ **PokeMetaX** (advanced wallet) - Full network support
 - ✅ Any app implementing CryptoJS AES-256-CBC with this format
+
+### Cross-App Import/Export
+
+Files exported from PokeBit can be imported into PokeMetaX and vice versa. Both apps:
+- Use the same encryption (AES-256-CBC with CryptoJS)
+- Use the same network IDs (ethereum, bitcoin, solana, etc.)
+- Support legacy format aliases (eth, btc, sol)
 
 ## Version History
 
 | Version | Changes |
 |---------|---------|
 | 1.0 | Initial format with ethereum/bitcoin support |
+| 1.1 | Added Solana support (SLIP-10 ed25519) |
 
 ---
 
