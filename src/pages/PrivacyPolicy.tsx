@@ -15,6 +15,7 @@ const PrivacyPolicy = () => {
       zh: "zh-CN",
       hi: "hi-IN",
       ru: "ru-RU",
+      ar: "ar-SA",
     };
     return locales[language] || "en-US";
   };
