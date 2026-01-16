@@ -144,6 +144,14 @@ const PopupGenerateView = ({ onBack, initialWordCount = 12 }: PopupGenerateViewP
                   privateKey={wallet.accounts.bitcoin.privateKey}
                   publicAddress={wallet.accounts.bitcoin.publicAddress}
                 />
+
+                <CryptoCard
+                  type="sol"
+                  icon="◎"
+                  name="Solana (SOL)"
+                  privateKey={wallet.accounts.solana.privateKey}
+                  publicAddress={wallet.accounts.solana.publicAddress}
+                />
               </div>
             </div>
 

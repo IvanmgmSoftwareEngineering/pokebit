@@ -5,6 +5,8 @@ import * as bip39 from 'bip39';
 import CryptoJS from 'crypto-js';
 import { HDKey } from '@scure/bip32';
 import { base58check, bech32 } from '@scure/base';
+import { derivePath } from 'ed25519-hd-key';
+import bs58 from 'bs58';
 
 // Simple hash functions using crypto-js
 function sha256Hash(data: Uint8Array): Uint8Array {
@@ -109,12 +111,42 @@ function publicKeyToBech32Address(publicKey: Uint8Array): string {
   return bech32.encode('bc', wordsWithVersion);
 }
 
+// Deriva clave privada Solana usando SLIP-10 ed25519
+async function deriveSolanaAccount(seed: Buffer): Promise<AccountData> {
+  // Solana usa SLIP-10 con path m/44'/501'/0'/0'
+  const solanaPath = "m/44'/501'/0'/0'";
+  const { key } = derivePath(solanaPath, seed.toString('hex'));
+  
+  // En Solana, la clave privada son los primeros 32 bytes
+  // La clave pública se deriva de la privada usando ed25519
+  // Para Solana, necesitamos el keypair completo (64 bytes: 32 privada + 32 pública)
+  
+  // Importar ed25519 dinámicamente para evitar problemas de ESM
+  const ed25519 = await import('@noble/ed25519');
+  
+  // Derivar clave pública desde la privada
+  const publicKey = await ed25519.getPublicKeyAsync(key);
+  
+  // La dirección de Solana es la clave pública codificada en base58
+  const publicAddress = bs58.encode(publicKey);
+  
+  // La clave privada en Solana se representa como el keypair completo (64 bytes)
+  // o solo los 32 bytes de la seed privada en base58
+  const privateKeyBytes = new Uint8Array([...key, ...publicKey]);
+  const privateKey = bs58.encode(privateKeyBytes);
+  
+  return {
+    privateKey,
+    publicAddress
+  };
+}
+
 // Deriva cuentas desde el mnemonic - Formato compatible con PokeMetaX
 export async function deriveAccounts(mnemonic: string): Promise<WalletAccounts> {
   // Derivar cuenta Ethereum usando ethers.js (usada para todas las EVM)
   const ethWallet = ethers.Wallet.fromPhrase(mnemonic);
   
-  // Derivar cuenta Bitcoin usando BIP84 path para Native SegWit: m/84'/0'/0'/0/0
+  // Derivar seed desde mnemonic
   const seed = await bip39.mnemonicToSeed(mnemonic);
   const masterKey = HDKey.fromMasterSeed(seed);
   
@@ -129,6 +161,9 @@ export async function deriveAccounts(mnemonic: string): Promise<WalletAccounts> 
   const btcPrivateKeyWIF = privateKeyToWIF(btcKey.privateKey);
   const btcAddress = publicKeyToBech32Address(btcKey.publicKey);
   
+  // Derivar cuenta Solana usando SLIP-10 ed25519
+  const solanaAccount = await deriveSolanaAccount(Buffer.from(seed));
+  
   // Formato PokeMetaX: usar networkIds estándar
   // La misma clave EVM sirve para todas las redes EVM
   return {
@@ -139,7 +174,8 @@ export async function deriveAccounts(mnemonic: string): Promise<WalletAccounts> 
     bitcoin: {
       privateKey: btcPrivateKeyWIF,
       publicAddress: btcAddress
-    }
+    },
+    solana: solanaAccount
   };
 }
 

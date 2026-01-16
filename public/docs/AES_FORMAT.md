@@ -37,6 +37,10 @@ After decryption, the JSON payload contains:
     "bitcoin": {
       "privateKey": "KwDiBf...",
       "publicAddress": "bc1q..."
+    },
+    "solana": {
+      "privateKey": "base58_encoded_keypair...",
+      "publicAddress": "base58_encoded_pubkey..."
     }
   }
 }
@@ -56,14 +60,14 @@ After decryption, the JSON payload contains:
 | `bitcoin` | bitcoin | Bitcoin mainnet |
 | `solana` | solana | Solana |
 
-> **Note:** All EVM networks share the same private key derived from the mnemonic. PokeBit currently generates `ethereum` and `bitcoin` accounts.
+> **Note:** All EVM networks share the same private key derived from the mnemonic. PokeBit generates `ethereum`, `bitcoin`, and `solana` accounts.
 
 ## Account Data Structure
 
 ```typescript
 interface AccountData {
-  privateKey: string;   // Hex (0x...) for EVM, WIF for Bitcoin
-  publicAddress: string; // Checksummed address for EVM, bech32 (bc1q...) for Bitcoin
+  privateKey: string;   // Hex (0x...) for EVM, WIF for Bitcoin, base58 keypair for Solana
+  publicAddress: string; // Checksummed for EVM, bech32 for Bitcoin, base58 for Solana
 }
 
 interface WalletAccounts {
@@ -77,6 +81,14 @@ interface WalletAccounts {
 |---------|----------|------|----------------|
 | Ethereum (EVM) | BIP-44 | `m/44'/60'/0'/0/0` | 0x... (checksummed) |
 | Bitcoin | BIP-84 | `m/84'/0'/0'/0/0` | bc1q... (Native SegWit) |
+| Solana | SLIP-10 | `m/44'/501'/0'/0'` | base58 (ed25519 pubkey) |
+
+### Solana Key Format
+
+Solana uses ed25519 keys derived via SLIP-10 (not BIP-32). The key formats are:
+
+- **Private Key**: 64-byte keypair (32-byte seed + 32-byte public key) encoded in base58
+- **Public Address**: 32-byte ed25519 public key encoded in base58
 
 ## Encryption Details
 

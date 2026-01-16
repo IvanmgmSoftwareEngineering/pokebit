@@ -5,7 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
 
 interface CryptoCardProps {
-  type: "eth" | "btc";
+  type: "eth" | "btc" | "sol";
   privateKey: string;
   publicAddress: string;
   icon: string;
@@ -24,11 +24,29 @@ const CryptoCard = ({ type, privateKey, publicAddress, icon, name }: CryptoCardP
     setTimeout(() => setCopied(null), 2000);
   };
 
+  const getTypeColor = () => {
+    switch (type) {
+      case "eth": return "text-eth";
+      case "btc": return "text-btc";
+      case "sol": return "text-purple-500";
+      default: return "text-foreground";
+    }
+  };
+
+  const getAnimationDelay = () => {
+    switch (type) {
+      case "eth": return "0.1s";
+      case "btc": return "0.2s";
+      case "sol": return "0.3s";
+      default: return "0.1s";
+    }
+  };
+
   return (
-    <div className={`crypto-card ${type} animate-slide-up`} style={{ animationDelay: type === "eth" ? "0.1s" : "0.2s" }}>
+    <div className={`crypto-card ${type} animate-slide-up`} style={{ animationDelay: getAnimationDelay() }}>
       <div className="flex items-center gap-2 mb-3">
         <span className="text-xl">{icon}</span>
-        <span className={`font-semibold ${type === "eth" ? "text-eth" : "text-btc"}`}>
+        <span className={`font-semibold ${getTypeColor()}`}>
           {name}
         </span>
       </div>
