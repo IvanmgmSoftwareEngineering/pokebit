@@ -152,6 +152,24 @@
     @apply bg-background text-foreground font-sans antialiased;
     font-family: var(--font-display);
   }
+
+  /* RTL Support */
+  [dir="rtl"] {
+    text-align: right;
+  }
+
+  [dir="rtl"] .crypto-card.eth,
+  [dir="rtl"] .crypto-card.btc {
+    @apply border-l-0 border-r-4;
+  }
+
+  [dir="rtl"] .crypto-card.eth {
+    border-right-color: hsl(var(--eth-color));
+  }
+
+  [dir="rtl"] .crypto-card.btc {
+    border-right-color: hsl(var(--btc-color));
+  }
 }
 
 @layer components {
