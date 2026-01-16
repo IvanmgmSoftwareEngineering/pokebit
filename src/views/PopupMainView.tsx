@@ -86,13 +86,21 @@ const PopupMainView = ({ onGenerate, onImport }: PopupMainViewProps) => {
             {t("main.downloadExtension")}
           </a>
         </div>
-        <p className="text-center mt-2">
+        <p className="text-center mt-2 space-x-3">
           <Link 
             to="/privacy" 
             className="text-xs text-primary hover:text-primary/80 hover:underline transition-colors"
           >
             {t("main.privacyLink")}
           </Link>
+          <a 
+            href="https://ud.me/doctor.bitcoin" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-xs text-primary hover:text-primary/80 hover:underline transition-colors"
+          >
+            doctor.bitcoin
+          </a>
         </p>
       </footer>
     </div>
