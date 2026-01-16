@@ -14,7 +14,7 @@ export const languages: LanguageInfo[] = [
   { code: "zh", name: "中文", flag: "🇨🇳" },
   { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
   { code: "ru", name: "Русский", flag: "🇷🇺" },
-  { code: "ar", name: "العربية", flag: "🇸🇦" },
+  { code: "ar", name: "العربية", flag: "🇮🇷" },
 ];
 
 const translations: Record<Language, Record<string, string>> = {
