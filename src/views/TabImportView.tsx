@@ -381,6 +381,16 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
                 privateKey={wallet.accounts.bitcoin?.privateKey || wallet.accounts.btc?.privateKey}
                 publicAddress={wallet.accounts.bitcoin?.publicAddress || wallet.accounts.btc?.publicAddress}
               />
+
+              {(wallet.accounts.solana?.privateKey || wallet.accounts.sol?.privateKey) && (
+                <CryptoCard
+                  type="sol"
+                  icon="◎"
+                  name="Solana (SOL)"
+                  privateKey={wallet.accounts.solana?.privateKey || wallet.accounts.sol?.privateKey}
+                  publicAddress={wallet.accounts.solana?.publicAddress || wallet.accounts.sol?.publicAddress}
+                />
+              )}
             </div>
 
             {/* Export with new password section */}
