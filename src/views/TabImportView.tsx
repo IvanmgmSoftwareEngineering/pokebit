@@ -370,16 +370,16 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
                 type="eth"
                 icon="⧫"
                 name="Ethereum (ETH)"
-                privateKey={wallet.accounts.eth.privateKey}
-                publicAddress={wallet.accounts.eth.publicAddress}
+                privateKey={wallet.accounts.ethereum?.privateKey || wallet.accounts.eth?.privateKey}
+                publicAddress={wallet.accounts.ethereum?.publicAddress || wallet.accounts.eth?.publicAddress}
               />
               
               <CryptoCard
                 type="btc"
                 icon="₿"
                 name="Bitcoin (BTC)"
-                privateKey={wallet.accounts.btc.privateKey}
-                publicAddress={wallet.accounts.btc.publicAddress}
+                privateKey={wallet.accounts.bitcoin?.privateKey || wallet.accounts.btc?.privateKey}
+                publicAddress={wallet.accounts.bitcoin?.publicAddress || wallet.accounts.btc?.publicAddress}
               />
             </div>
 
