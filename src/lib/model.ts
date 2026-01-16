@@ -72,6 +72,7 @@ export interface WalletAccounts {
 export interface LegacyWalletAccounts {
   eth: AccountData;
   btc: AccountData;
+  sol?: AccountData;
 }
 
 export interface Wallet {
@@ -234,18 +235,26 @@ export async function deriveAccounts(mnemonic: string): Promise<WalletAccounts> 
 
 // Función helper para convertir formato legacy a nuevo formato
 export function convertLegacyToNewFormat(legacy: LegacyWalletAccounts): WalletAccounts {
-  return {
+  const result: WalletAccounts = {
     ethereum: legacy.eth,
     bitcoin: legacy.btc
   };
+  if (legacy.sol) {
+    result.solana = legacy.sol;
+  }
+  return result;
 }
 
 // Función helper para convertir nuevo formato a legacy (compatibilidad interna)
 export function convertNewToLegacyFormat(accounts: WalletAccounts): LegacyWalletAccounts {
-  return {
+  const result: LegacyWalletAccounts = {
     eth: accounts.ethereum || accounts.eth,
     btc: accounts.bitcoin || accounts.btc
   };
+  if (accounts.solana || accounts.sol) {
+    result.sol = accounts.solana || accounts.sol;
+  }
+  return result;
 }
 
 export async function generateWallet(wordCount: WordCount = 12): Promise<Wallet> {
@@ -299,25 +308,33 @@ export function decryptVault(encryptedVault: EncryptedVault, password: string): 
     }
     
     // Normalizar formato de accounts para compatibilidad PokeMetaX
-    // Soporta tanto formato legacy (eth/btc) como nuevo (ethereum/bitcoin)
+    // Soporta tanto formato legacy (eth/btc/sol) como nuevo (ethereum/bitcoin/solana)
     const normalizedAccounts: WalletAccounts = {};
     
-    // Mapear networkIds de PokeMetaX
+    // Mapear Ethereum (soporta alias 'eth')
     if (data.accounts.ethereum) {
       normalizedAccounts.ethereum = data.accounts.ethereum;
     } else if (data.accounts.eth) {
       normalizedAccounts.ethereum = data.accounts.eth;
     }
     
+    // Mapear Bitcoin (soporta alias 'btc')
     if (data.accounts.bitcoin) {
       normalizedAccounts.bitcoin = data.accounts.bitcoin;
     } else if (data.accounts.btc) {
       normalizedAccounts.bitcoin = data.accounts.btc;
     }
     
-    // Copiar cualquier otra red soportada por PokeMetaX
-    const supportedNetworks = ['polygon', 'arbitrum', 'optimism', 'base', 'bsc', 'avalanche', 'solana'];
-    for (const network of supportedNetworks) {
+    // Mapear Solana (soporta alias 'sol')
+    if (data.accounts.solana) {
+      normalizedAccounts.solana = data.accounts.solana;
+    } else if (data.accounts.sol) {
+      normalizedAccounts.solana = data.accounts.sol;
+    }
+    
+    // Copiar cualquier otra red EVM soportada por PokeMetaX
+    const evmNetworks = ['polygon', 'arbitrum', 'optimism', 'base', 'bsc', 'avalanche'];
+    for (const network of evmNetworks) {
       if (data.accounts[network]) {
         normalizedAccounts[network] = data.accounts[network];
       }
