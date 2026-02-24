@@ -1,4 +1,4 @@
-<p align="center">
+ <p align="center">
   <img src="public/pokebit-logo-original.png" alt="PokeBit Logo" width="120" height="120">
 </p>
 
