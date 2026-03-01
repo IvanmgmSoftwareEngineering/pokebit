@@ -451,9 +451,9 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
           </div>
         )}
 
-        {/* Bottom button */}
-        <div className="mt-8 pt-6 border-t border-border/50">
-          {wallet ? (
+        {/* Action buttons */}
+        <div className="mt-8 space-y-3">
+          {wallet && (
             <Button
               variant="destructive"
               className="w-full"
@@ -462,16 +462,15 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
               <RotateCcw className="w-4 h-4" />
               {t("import.reset")}
             </Button>
-          ) : (
-            <Button
-              variant="ghost"
-              className="w-full"
-              onClick={onBack}
-            >
-              <ArrowLeft className="w-4 h-4" />
-              {t("import.backMenu")}
-            </Button>
           )}
+          <Button
+            variant="ghost"
+            className="w-full"
+            onClick={onBack}
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {t("import.backMenu")}
+          </Button>
         </div>
 
         {/* Footer */}
