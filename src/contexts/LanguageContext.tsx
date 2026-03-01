@@ -20,7 +20,7 @@ export const languages: LanguageInfo[] = [
 const translations: Record<Language, Record<string, string>> = {
   en: {
     "app.title": "PokeBit",
-    "app.subtitle": "A child's game.",
+    "app.subtitle": "A child's game",
     "main.generate": "GENERATE NEW VAULT",
     "main.generate12": "GENERATE VAULT (12 WORDS)",
     "main.generate24": "GENERATE VAULT (24 WORDS)",
@@ -153,7 +153,7 @@ const translations: Record<Language, Record<string, string>> = {
   },
   es: {
     "app.title": "PokeBit",
-    "app.subtitle": "A child's game.",
+    "app.subtitle": "A child's game",
     "main.generate": "GENERAR NUEVA BÓVEDA",
     "main.generate12": "GENERAR BÓVEDA (12 PALABRAS)",
     "main.generate24": "GENERAR BÓVEDA (24 PALABRAS)",
@@ -286,7 +286,7 @@ const translations: Record<Language, Record<string, string>> = {
   },
   zh: {
     "app.title": "PokeBit",
-    "app.subtitle": "A child's game.",
+    "app.subtitle": "A child's game",
     "main.generate": "生成新保险库",
     "main.generate12": "生成保险库（12个词）",
     "main.generate24": "生成保险库（24个词）",
@@ -419,7 +419,7 @@ const translations: Record<Language, Record<string, string>> = {
   },
   hi: {
     "app.title": "PokeBit",
-    "app.subtitle": "A child's game.",
+    "app.subtitle": "A child's game",
     "main.generate": "नया वॉल्ट बनाएं",
     "main.generate12": "वॉल्ट बनाएं (12 शब्द)",
     "main.generate24": "वॉल्ट बनाएं (24 शब्द)",
@@ -552,7 +552,7 @@ const translations: Record<Language, Record<string, string>> = {
   },
   ru: {
     "app.title": "PokeBit",
-    "app.subtitle": "A child's game.",
+    "app.subtitle": "A child's game",
     "main.generate": "СОЗДАТЬ НОВОЕ ХРАНИЛИЩЕ",
     "main.generate12": "СОЗДАТЬ ХРАНИЛИЩЕ (12 СЛОВ)",
     "main.generate24": "СОЗДАТЬ ХРАНИЛИЩЕ (24 СЛОВА)",
@@ -685,7 +685,7 @@ const translations: Record<Language, Record<string, string>> = {
   },
   ar: {
     "app.title": "PokeBit",
-    "app.subtitle": "A child's game.",
+    "app.subtitle": "A child's game",
     "main.generate": "إنشاء خزنة جديدة",
     "main.generate12": "إنشاء خزنة (12 كلمة)",
     "main.generate24": "إنشاء خزنة (24 كلمة)",
