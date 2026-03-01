@@ -474,7 +474,7 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
         </div>
 
         {/* Footer */}
-        <footer className="mt-10 text-center">
+        <footer className="mt-10 pt-4 border-t border-border/50 text-center">
           <p className="text-xs text-muted-foreground">
             ©2026 PokeBit • Designed by{" "}
             <a 
