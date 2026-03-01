@@ -85,16 +85,14 @@ const PopupMainView = ({ onGenerate, onImport }: PopupMainViewProps) => {
       </main>
 
       <footer className="px-5 py-4 border-t border-border/50">
-        <p className="text-center text-xs text-muted-foreground">
-          {t("main.footer")}
-        </p>
-        <p className="text-center mt-2 space-x-3">
+        <p className="text-center mb-2 space-x-3">
           <Link 
             to="/privacy" 
             className="text-xs text-primary hover:text-primary/80 hover:underline transition-colors"
           >
             {t("main.privacyLink")}
           </Link>
+          <span className="text-xs text-muted-foreground">|</span>
           <a 
             href="https://ud.me/doctor.bitcoin" 
             target="_blank" 
@@ -103,6 +101,9 @@ const PopupMainView = ({ onGenerate, onImport }: PopupMainViewProps) => {
           >
             doctor.bitcoin
           </a>
+        </p>
+        <p className="text-center text-xs text-muted-foreground">
+          {t("main.footer")}
         </p>
       </footer>
     </div>
