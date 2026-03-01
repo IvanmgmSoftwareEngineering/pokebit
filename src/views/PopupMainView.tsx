@@ -67,13 +67,9 @@ const PopupMainView = ({ onGenerate, onImport }: PopupMainViewProps) => {
             {t("main.securityText")}
           </p>
         </div>
-      </main>
 
-      <footer className="px-5 py-4 border-t border-border/50">
-        <p className="text-center text-xs text-muted-foreground">
-          {t("main.footer")}
-        </p>
-        <div className="text-center mt-3">
+        {/* Download Chrome Extension */}
+        <div className="mt-6 text-center">
           <a 
             href="https://chromewebstore.google.com/detail/jfeggeoablgcjdpeadembmajifdagbce"
             target="_blank"
@@ -86,6 +82,12 @@ const PopupMainView = ({ onGenerate, onImport }: PopupMainViewProps) => {
             {t("main.downloadExtension")}
           </a>
         </div>
+      </main>
+
+      <footer className="px-5 py-4 border-t border-border/50">
+        <p className="text-center text-xs text-muted-foreground">
+          {t("main.footer")}
+        </p>
         <p className="text-center mt-2 space-x-3">
           <Link 
             to="/privacy" 
