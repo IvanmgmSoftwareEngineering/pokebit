@@ -135,7 +135,7 @@ const PrivacyPolicy = () => {
               {t("privacy.section9.text")}
             </p>
             <p className="text-primary font-medium mt-2">
-              joamgm88@gmail.com
+              contact@pokebit.xyz
             </p>
           </section>
 
