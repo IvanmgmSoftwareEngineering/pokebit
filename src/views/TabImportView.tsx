@@ -476,7 +476,7 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
 
         {/* Footer */}
         <footer className="mt-10 text-center">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs text-muted-foreground">
             {t("main.footer")}
           </p>
         </footer>

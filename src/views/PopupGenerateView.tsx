@@ -241,15 +241,19 @@ const PopupGenerateView = ({ onBack, initialWordCount = 12 }: PopupGenerateViewP
       </main>
 
       <footer className="px-5 py-3 border-t border-border/50">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-full"
-          onClick={onBack}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t("generate.back")}
-        </Button>
+        <div className="flex justify-center items-center gap-3 mb-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onBack}
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {t("generate.back")}
+          </Button>
+        </div>
+        <p className="text-center text-xs text-muted-foreground">
+          {t("main.footer")}
+        </p>
       </footer>
 
       {/* Help Dialog */}
