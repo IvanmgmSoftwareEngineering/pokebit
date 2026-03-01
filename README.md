@@ -127,7 +127,7 @@ We built PokeBit because we believe:
 
 ## 📞 Support
 
-- 📧 Email: joamgm88@gmail.com
+- 📧 Email: contact@pokebit.xyz
 - 👨‍💻 Creator: doctor.bitcoin@ud.me
 - 🏢 Company: hotel.nft@ud.me
 
