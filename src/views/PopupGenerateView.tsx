@@ -238,19 +238,22 @@ const PopupGenerateView = ({ onBack, initialWordCount = 12 }: PopupGenerateViewP
             </div>
           </>
         )}
-      </main>
 
-      <footer className="px-5 py-3 border-t border-border/50">
-        <div className="flex justify-center items-center gap-3 mb-2">
+        {/* Back button */}
+        <div className="mt-6">
           <Button
             variant="ghost"
             size="sm"
+            className="w-full"
             onClick={onBack}
           >
             <ArrowLeft className="w-4 h-4" />
             {t("generate.back")}
           </Button>
         </div>
+      </main>
+
+      <footer className="px-5 py-3 border-t border-border/50">
         <p className="text-center text-xs text-muted-foreground">
           ©2026 PokeBit • Designed by{" "}
           <a 
