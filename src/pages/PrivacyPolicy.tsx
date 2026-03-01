@@ -148,8 +148,17 @@ const PrivacyPolicy = () => {
 
         {/* Footer */}
         <footer className="mt-12 pt-6 border-t border-border/50 text-center">
-          <p className="text-sm text-muted-foreground">
-            {t("privacy.footer")}
+          <p className="text-xs text-muted-foreground">
+            ©2026 PokeBit • Designed by{" "}
+            <a 
+              href="https://ud.me/doctor.bitcoin" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/80 hover:underline transition-colors"
+            >
+              doctor.bitcoin
+            </a>
+            {" "}• A child's game.
           </p>
         </footer>
       </div>
