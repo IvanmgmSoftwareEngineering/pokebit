@@ -252,7 +252,16 @@ const PopupGenerateView = ({ onBack, initialWordCount = 12 }: PopupGenerateViewP
           </Button>
         </div>
         <p className="text-center text-xs text-muted-foreground">
-          {t("main.footer")}
+          ©2026 PokeBit • Designed by{" "}
+          <a 
+            href="https://ud.me/doctor.bitcoin" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-primary hover:text-primary/80 hover:underline transition-colors"
+          >
+            doctor.bitcoin
+          </a>
+          {" "}• A child's game.
         </p>
       </footer>
 

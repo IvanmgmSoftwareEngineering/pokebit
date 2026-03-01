@@ -85,25 +85,25 @@ const PopupMainView = ({ onGenerate, onImport }: PopupMainViewProps) => {
       </main>
 
       <footer className="px-5 py-4 border-t border-border/50">
-        <p className="text-center mb-2 space-x-3">
+        <p className="text-center mb-2">
           <Link 
             to="/privacy" 
             className="text-xs text-primary hover:text-primary/80 hover:underline transition-colors"
           >
             {t("main.privacyLink")}
           </Link>
-          <span className="text-xs text-muted-foreground">|</span>
+        </p>
+        <p className="text-center text-xs text-muted-foreground">
+          ©2026 PokeBit • Designed by{" "}
           <a 
             href="https://ud.me/doctor.bitcoin" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="text-xs text-primary hover:text-primary/80 hover:underline transition-colors"
+            className="text-primary hover:text-primary/80 hover:underline transition-colors"
           >
             doctor.bitcoin
           </a>
-        </p>
-        <p className="text-center text-xs text-muted-foreground">
-          {t("main.footer")}
+          {" "}• A child's game.
         </p>
       </footer>
     </div>
