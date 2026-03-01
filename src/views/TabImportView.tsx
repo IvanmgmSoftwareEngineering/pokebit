@@ -477,7 +477,16 @@ const TabImportView = ({ onBack }: TabImportViewProps) => {
         {/* Footer */}
         <footer className="mt-10 text-center">
           <p className="text-xs text-muted-foreground">
-            {t("main.footer")}
+            ©2026 PokeBit • Designed by{" "}
+            <a 
+              href="https://ud.me/doctor.bitcoin" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/80 hover:underline transition-colors"
+            >
+              doctor.bitcoin
+            </a>
+            {" "}• A child's game.
           </p>
         </footer>
       </div>
